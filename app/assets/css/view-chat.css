@@ -1,0 +1,97 @@
+/* View chat overrides — based on nothing/wechat_generator/viewLive.html + style.css */
+
+.chat-page.chat-view-page {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  position: relative;
+  top: auto;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .chat-page.chat-view-page {
+    align-self: auto;
+    min-width: 400px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}
+
+.chat-page.chat-view-page main {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  font-size: 16px;
+  background-color: #ebebeb;
+  padding-bottom: 10px;
+}
+
+.chat-page.chat-view-page main::-webkit-scrollbar {
+  display: none;
+}
+
+.chat-page.chat-view-page .message-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-page.chat-view-page .message-item {
+  width: calc(100% - 60px);
+}
+
+.chat-page.chat-view-page .message-item--right {
+  align-self: flex-end;
+}
+
+.chat-page.chat-view-page .message-item .avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.chat-page.chat-view-page .message-item > div {
+  min-width: 0;
+}
+
+.chat-page.chat-view-page .message-bubble {
+  max-width: 100%;
+}
+
+.chat-page.chat-view-page .badge-block {
+  width: 100%;
+}
+
+.chat-page.chat-view-page footer .text-input {
+  flex: 1;
+  margin: 0 10px;
+  height: 36px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.chat-page.chat-view-page footer .next-chapter-link {
+  flex: 1;
+  margin: 0 10px;
+  height: 36px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #d9f0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #1f2937;
+}

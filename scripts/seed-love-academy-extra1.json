@@ -1,0 +1,31 @@
+{
+  "userId": "6a46b6e521b59b8f3faee998",
+  "genTitle": "恋爱学园番外①",
+  "author": "寒江雪",
+  "chatName": "ai Per",
+  "chatType": "private",
+  "type": "chat",
+  "userList": [
+    {
+      "name": "Per",
+      "img": "https://res.cloudinary.com/dm8co83yz/image/upload/v1756819917/arlllr1dxepdavpxflzh.jpg"
+    },
+    {
+      "name": "Tar",
+      "img": "https://res.cloudinary.com/dm8co83yz/image/upload/v1756819953/pj741r46ni7pcrd3f8yb.jpg"
+    }
+  ],
+  "chatList": [
+    {"type":"time","content":"6月20日 10:20"},
+    {"side":"left","name":"Per","user_img":"https://res.cloudinary.com/dm8co83yz/image/upload/v1756819917/arlllr1dxepdavpxflzh.jpg","type":"text","content":"aiTar，假期不要太想我！我和之前校园开放日认识的学长去日本实习啦！"},
+    {"side":"right","name":"Tar","user_img":"https://res.cloudinary.com/dm8co83yz/image/upload/v1756819953/pj741r46ni7pcrd3f8yb.jpg","type":"text","content":"谁会想你啊！我会早早去参加新生聚会，到时候认识了新的朋友你不要羡慕我！"},
+    {"type":"timepass","content":""},
+    {"type":"time","content":"6月30日 08:20"},
+    {"side":"right","name":"Tar","user_img":"https://res.cloudinary.com/dm8co83yz/image/upload/v1756819953/pj741r46ni7pcrd3f8yb.jpg","type":"text","content":"aiPer，今天出成绩，你回来了吗？"},
+    {"type":"time","content":"6月30日 10:00"},
+    {"side":"right","name":"Tar","user_img":"https://res.cloudinary.com/dm8co83yz/image/upload/v1756819953/pj741r46ni7pcrd3f8yb.jpg","type":"text","content":"嘿Per！为什么成绩榜上没有你啊！怎么回事啊？"},
+    {"side":"right","name":"Tar","user_img":"https://res.cloudinary.com/dm8co83yz/image/upload/v1756819953/pj741r46ni7pcrd3f8yb.jpg","type":"text","content":"你啥时候回泰国呀？"},
+    {"type":"time","content":"7月5日 19:00"},
+    {"side":"right","name":"Tar","user_img":"https://res.cloudinary.com/dm8co83yz/image/upload/v1756819953/pj741r46ni7pcrd3f8yb.jpg","type":"text","content":"Per，我和朋友们准备去日本毕业旅行呐！你猜我们会不会碰到^_^"}
+  ]
+}

@@ -1,0 +1,329 @@
+.chat-page {
+  min-width: 400px;
+  max-width: 400px;
+  position: sticky;
+  top: 0;
+}
+
+.chat-page .chat-page-header {
+  height: 50px;
+  background: #2b2b2b;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  z-index: 1;
+}
+
+.chat-page .icon {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.chat-page .nav-back {
+  height: 100%;
+  line-height: 44px;
+  width: 66px;
+  font-size: 16px;
+  font-weight: lighter;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+}
+
+.chat-page .icon-back {
+  height: 20px;
+  width: 20px;
+  background-image: url('/img/icon/back.svg');
+  margin-right: 5px;
+}
+
+.chat-page .chat-page-title {
+  font-size: 18px;
+  margin: 0;
+  max-width: calc(100% - 140px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 50px;
+}
+
+.chat-page .nav-person {
+  padding-right: 8px;
+}
+
+.chat-page .icon-person {
+  width: 23px;
+  height: 21px;
+  background-image: url('/img/icon/person.svg');
+}
+
+.chat-page main {
+  font-size: 16px;
+  background-color: #ebebeb;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+  min-height: 500px;
+}
+
+.chat-page main::-webkit-scrollbar {
+  display: none;
+}
+
+.chat-page .message-item {
+  width: 100%;
+  display: flex;
+  margin-top: 8px;
+  position: relative;
+}
+
+.chat-page .deleteBtn {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: darkred;
+  color: white;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 10px;
+  border-radius: 50%;
+  font-family: monospace;
+  transform: translateY(-5px);
+  display: none;
+  border: none;
+  cursor: pointer;
+}
+
+.chat-page .message-item--right .deleteBtn {
+  left: unset;
+  right: 0;
+}
+
+.chat-page .message-item:hover .deleteBtn,
+.chat-page .badge-block:hover .deleteBtn,
+.chat-page .imgCenter-badge:hover .deleteBtn {
+  display: flex;
+}
+
+.chat-page .message-item .avatar {
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+  object-fit: cover;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.chat-page .message-item--right {
+  flex-direction: row-reverse;
+}
+
+.chat-page .message-bubble {
+  border: 1px solid #ddd;
+  padding: 7px 10px;
+  border-radius: 3px;
+  max-width: 280px;
+  position: relative;
+  word-break: break-word;
+  width: fit-content;
+}
+
+.chat-page .message-item--left .message-bubble {
+  background-color: #fff;
+}
+
+.chat-page .message-item--left .message-bubble.sticker {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.chat-page .message-item--left .message-bubble::before {
+  content: '';
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  position: absolute;
+  top: 14px;
+  left: -6px;
+  transform: rotate(-45deg);
+  border-radius: 0 0 20px 0;
+}
+
+.chat-page .message-item--left .message-bubble.sticker::before {
+  display: none;
+}
+
+.chat-page .message-item--right .message-bubble {
+  background-color: #9fe759;
+  border-color: #87cd51;
+}
+
+.chat-page .message-item--right .message-bubble.sticker {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.chat-page .message-item--right .message-bubble::before {
+  content: '';
+  border-top: 1px solid #87cd51;
+  border-left: 1px solid #87cd51;
+  width: 10px;
+  height: 10px;
+  background-color: #9fe759;
+  position: absolute;
+  top: 14px;
+  right: -6px;
+  transform: rotate(135deg);
+  border-radius: 0 0 20px 0;
+}
+
+.chat-page .message-item--right .message-bubble.sticker::before {
+  display: none;
+}
+
+.chat-page .message-bubble.img {
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.chat-page .message-bubble.img img {
+  max-width: 150px;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.chat-page .message-bubble.sticker img {
+  max-width: 120px;
+  max-height: 300px;
+}
+
+.chat-page .message-bubble.img::before {
+  content: none;
+}
+
+.chat-page .phoneIcon,
+.chat-page .cameraIcon {
+  height: 17px;
+  vertical-align: middle;
+  margin-bottom: 2px;
+}
+
+.chat-page footer {
+  height: 50px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background-color: #f5f5f7;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-page footer .icon {
+  width: 28px;
+  height: 28px;
+  margin-left: 10px;
+}
+
+.chat-page footer .icon:last-child {
+  margin-right: 10px;
+}
+
+.chat-page footer .text-input {
+  flex: 1;
+  margin-left: 10px;
+  height: 36px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #f5f5f5;
+  outline: none;
+  cursor: pointer;
+}
+
+.chat-page footer .icon-voice {
+  background-image: url('/img/icon/voice.svg');
+}
+
+.chat-page footer .icon-plus {
+  background-image: url('/img/icon/plus-cycle.svg');
+}
+
+.chat-page footer .icon-face {
+  background-image: url('/img/icon/smile-face.svg');
+}
+
+.chat-page .badge-block {
+  display: block;
+  text-align: center;
+  margin: 5px auto;
+  position: relative;
+}
+
+.chat-page .badge-block:hover .deleteBtn {
+  right: 100px;
+  left: unset;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.chat-page .imgCenter-badge {
+  display: block;
+  text-align: center;
+  margin: 5px auto;
+  position: relative;
+}
+
+.chat-page .imgCenter-badge:hover .deleteBtn {
+  left: 10px;
+  top: 0;
+  transform: translateY(-50%);
+}
+
+.chat-page .imgCenter-badge img {
+  width: 75%;
+  margin: 0 auto;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.chat-page .time-badge {
+  color: #000;
+  background: rgba(255, 255, 255, 0.7);
+  display: inline-block;
+  font-size: 10px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  max-width: calc(100% - 120px);
+}
+
+.chat-page .time-badge.time {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.chat-page .leftName {
+  line-height: 20px;
+  height: 20px;
+  font-size: 12px;
+  margin-top: -3px;
+}
+
+.chat-page .message-list {
+  max-height: 85vh;
+}
+
+.chat-page .message-list.is-generating {
+  max-height: unset;
+}
