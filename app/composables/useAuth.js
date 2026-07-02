@@ -4,8 +4,18 @@ export const useAuth = () => {
 
   const fetchUser = async () => {
     try {
-      const apiFetch = import.meta.server ? useRequestFetch() : $fetch
-      const response = await apiFetch('/api/auth/me')
+      if (import.meta.server) {
+        const event = useRequestEvent()
+
+        if (event) {
+          const { getAuthUserFromEvent } = await import('~/server/utils/auth')
+          const authUser = getAuthUserFromEvent(event)
+          user.value = authUser
+          return authUser
+        }
+      }
+
+      const response = await $fetch('/api/auth/me')
       user.value = response.user
       return response.user
     } catch {

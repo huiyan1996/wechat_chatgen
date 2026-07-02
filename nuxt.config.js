@@ -6,6 +6,10 @@ export default defineNuxtConfig({
   routeRules: {
     '/chat': { redirect: '/listing' },
     '/text': { redirect: '/listing' },
+    '/api/**': { cache: false, swr: false },
+  },
+  nitro: {
+    preset: process.env.NETLIFY ? 'netlify' : undefined,
   },
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss'],
