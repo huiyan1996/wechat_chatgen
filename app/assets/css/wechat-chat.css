@@ -63,6 +63,7 @@
 .chat-page main {
   font-size: 16px;
   background-color: #ebebeb;
+  overflow-x: hidden;
   overflow-y: auto;
   scroll-behavior: smooth;
   padding-bottom: 10px;
@@ -320,10 +321,15 @@
   margin-top: -3px;
 }
 
-.chat-page .message-list {
+.chat-page > main > .message-list {
+  display: flow-root;
   max-height: 85vh;
 }
 
-.chat-page .message-list.is-generating {
-  max-height: unset;
+.chat-page.is-capturing main {
+  overflow: hidden;
+}
+
+.chat-page.is-capturing > main > .message-list {
+  max-height: none;
 }

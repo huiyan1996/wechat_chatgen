@@ -417,6 +417,8 @@ export const useChatEditor = (chatId) => {
       return null
     }
 
+    chatPage.classList.add('is-capturing')
+
     if (messageList) {
       messageList.style.maxHeight = 'unset'
     }
@@ -432,6 +434,8 @@ export const useChatEditor = (chatId) => {
         ...options,
       })
     } finally {
+      chatPage.classList.remove('is-capturing')
+
       if (messageList) {
         messageList.style.maxHeight = '85vh'
       }
