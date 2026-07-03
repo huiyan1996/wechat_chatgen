@@ -9,8 +9,10 @@ export const useChatEditor = (chatId) => {
   const saveError = ref('')
   const generatedImage = ref('')
   const showImageModal = ref(false)
+  const isGeneratingPreview = ref(false)
   const isDownloadingPng = ref(false)
   const downloadPngError = ref('')
+  const generateError = ref('')
   const chapterOptions = ref([])
 
   const form = reactive({
@@ -387,31 +389,82 @@ export const useChatEditor = (chatId) => {
     }
   }
 
-  const generatePreviewImage = async (element) => {
-    if (!import.meta.client || !element) {
-      return
+  const resolveRefElement = (refOrElement) => {
+    if (!refOrElement) {
+      return null
     }
 
-    const { default: html2canvas } = await import('html2canvas')
-    const canvas = await html2canvas(element, { useCORS: true })
-    generatedImage.value = canvas.toDataURL('image/png')
-    showImageModal.value = true
+    if (refOrElement instanceof HTMLElement) {
+      return refOrElement
+    }
+
+    if (refOrElement.value instanceof HTMLElement) {
+      return refOrElement.value
+    }
+
+    return null
   }
 
-  const downloadPreviewPng = async (element) => {
-    if (!import.meta.client || !element) {
-      return
+  const captureChatCanvas = async (chatPreview, options = {}) => {
+    if (!import.meta.client || !chatPreview) {
+      return null
     }
 
+    const chatPage = resolveRefElement(chatPreview.chatPageRef)
+    const messageList = resolveRefElement(chatPreview.messageListRef)
+
+    if (!chatPage) {
+      return null
+    }
+
+    if (messageList) {
+      messageList.style.maxHeight = 'unset'
+    }
+
+    try {
+      const { default: html2canvas } = await import('html2canvas')
+      return await html2canvas(chatPage, {
+        useCORS: true,
+        ...options,
+      })
+    } finally {
+      if (messageList) {
+        messageList.style.maxHeight = '85vh'
+      }
+    }
+  }
+
+  const generatePreviewImage = async (chatPreview) => {
+    isGeneratingPreview.value = true
+    generateError.value = ''
+
+    try {
+      const canvas = await captureChatCanvas(chatPreview)
+
+      if (!canvas) {
+        return
+      }
+
+      generatedImage.value = canvas.toDataURL('image/png')
+      showImageModal.value = true
+    } catch (error) {
+      console.error('Image generation failed:', error)
+      generateError.value = '图片生成失败，请重试'
+    } finally {
+      isGeneratingPreview.value = false
+    }
+  }
+
+  const downloadPreviewPng = async (chatPreview) => {
     isDownloadingPng.value = true
     downloadPngError.value = ''
 
     try {
-      const { default: html2canvas } = await import('html2canvas')
-      const canvas = await html2canvas(element, {
-        useCORS: true,
-        scale: 3,
-      })
+      const canvas = await captureChatCanvas(chatPreview, { scale: 3 })
+
+      if (!canvas) {
+        return
+      }
 
       const blob = await new Promise((resolve, reject) => {
         canvas.toBlob((result) => {
@@ -447,8 +500,10 @@ export const useChatEditor = (chatId) => {
     isUploading,
     generatedImage,
     showImageModal,
+    isGeneratingPreview,
     isDownloadingPng,
     downloadPngError,
+    generateError,
     chapterOptions,
     form,
     userList,

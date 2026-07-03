@@ -32,13 +32,22 @@
 
           <button
             type="button"
-            class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+            class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+            :disabled="isGeneratingPreview"
             aria-label="Generate preview image"
             @click="handleGenerate"
           >
-            生成
+            {{ isGeneratingPreview ? '生成中...' : '生成' }}
           </button>
         </div>
+
+        <p
+          v-if="generateError"
+          class="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700"
+          role="alert"
+        >
+          {{ generateError }}
+        </p>
 
         <p
           v-if="saveMessage"
@@ -510,7 +519,6 @@
           :chat-type="chatType"
           :chat-list="chatList"
           :default-img="defaultImg"
-          :is-generating="isGenerating || isDownloadingPng"
           @delete-message="deleteMessage"
           @change-side="changeMessageSide"
           @edit-content="updateMessageContent"
@@ -586,7 +594,6 @@ definePageMeta({
 })
 
 const chatPreviewRef = ref(null)
-const isGenerating = ref(false)
 
 const {
   isLoading,
@@ -597,8 +604,10 @@ const {
   isUploading,
   generatedImage,
   showImageModal,
+  isGeneratingPreview,
   isDownloadingPng,
   downloadPngError,
+  generateError,
   chapterOptions,
   form,
   userList,
@@ -683,21 +692,11 @@ const handleSave = async () => {
 }
 
 const handleGenerate = async () => {
-  isGenerating.value = true
-
-  await nextTick()
-
-  try {
-    await generatePreviewImage(chatPreviewRef.value?.chatPageRef)
-  } finally {
-    isGenerating.value = false
-  }
+  await generatePreviewImage(chatPreviewRef.value)
 }
 
 const handleDownloadPng = async () => {
-  await nextTick()
-
-  await downloadPreviewPng(chatPreviewRef.value?.chatPageRef)
+  await downloadPreviewPng(chatPreviewRef.value)
 }
 
 onMounted(() => {
