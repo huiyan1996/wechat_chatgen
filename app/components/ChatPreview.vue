@@ -55,7 +55,7 @@
               @click="emit('change-side', index)"
             />
 
-            <div class="message-body">
+            <div>
               <div
                 v-if="message.side === 'left' && chatType !== 'private'"
                 class="text-start leftName"
@@ -129,7 +129,7 @@
 
           <div
             v-else-if="message.type === 'time' || message.type === 'timepass'"
-            class="msg-item msg-meta"
+            class="message-list msg-item"
           >
             <div class="badge-block">
               <span
@@ -152,7 +152,7 @@
 
           <div
             v-else-if="message.type === 'imgCenter'"
-            class="msg-item msg-meta"
+            class="message-list msg-item"
           >
             <div class="imgCenter-badge">
               <img

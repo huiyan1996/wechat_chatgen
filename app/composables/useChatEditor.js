@@ -425,31 +425,11 @@ export const useChatEditor = (chatId) => {
       bubble.style.lineHeight = '1.5'
       bubble.style.boxSizing = 'border-box'
       bubble.style.verticalAlign = 'top'
-      bubble.style.marginTop = '0'
     })
 
     clone.querySelectorAll('.leftName').forEach((name) => {
-      name.style.marginTop = '-3px'
-      name.style.marginBottom = '0'
-      name.style.lineHeight = '20px'
-      name.style.height = '20px'
-    })
-
-    clone.querySelectorAll('.message-body').forEach((body) => {
-      body.style.display = 'flex'
-      body.style.flexDirection = 'column'
-      body.style.gap = '0'
-      body.style.lineHeight = 'normal'
-    })
-
-    clone.querySelectorAll('.msg-meta').forEach((meta) => {
-      meta.style.margin = '0'
-      meta.style.maxHeight = 'none'
-      meta.style.height = 'auto'
-    })
-
-    clone.querySelectorAll('.badge-block, .imgCenter-badge').forEach((block) => {
-      block.style.margin = '5px auto'
+      name.style.marginTop = '0'
+      name.style.marginBottom = '2px'
     })
 
     clone.querySelectorAll('.message-item').forEach((item) => {
