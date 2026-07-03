@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   return {
     chapters: chapters.map((chapter) => ({
       id: chapter._id.toString(),
-      title: chapter.genTitle || '无标�?,
+      title: chapter.genTitle || '???',
       type: chapter.type || 'chat',
     })),
   }
