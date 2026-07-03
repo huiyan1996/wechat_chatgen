@@ -115,7 +115,7 @@ export const useTextEditor = () => {
     isGenerating.value = true
 
     try {
-      const { default: html2canvas } = await import('html2canvas')
+      const { toPng } = await import('html-to-image')
       const tempContainer = document.createElement('div')
 
       tempContainer.style.width = '1200px'
@@ -148,15 +148,14 @@ export const useTextEditor = () => {
 
       document.body.appendChild(tempContainer)
 
-      const canvas = await html2canvas(tempContainer, {
+      generatedImage.value = await toPng(tempContainer, {
         width: 1200,
         height: tempContainer.scrollHeight,
-        useCORS: true,
+        cacheBust: true,
         backgroundColor: '#ffffff',
       })
 
       document.body.removeChild(tempContainer)
-      generatedImage.value = canvas.toDataURL('image/png')
       showImageModal.value = true
     } catch {
       saveError.value = '图片生成失败，请重试'
