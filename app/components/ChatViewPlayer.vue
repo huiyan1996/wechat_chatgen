@@ -1,11 +1,11 @@
 <template>
   <section class="chat-page chat-view-page w-full">
-    <header>
+    <header class="chat-page-header">
       <div class="nav-back">
         <i class="icon icon-back" />
         <span>微信</span>
       </div>
-      <h1>
+      <h1 class="chat-page-title">
         {{ chatName || '小说名字' }}
       </h1>
       <div class="nav-person">
@@ -70,9 +70,9 @@
                 v-else-if="message.type === 'call'"
                 class="message-bubble"
               >
-                <div class="call-row">
+                <div class="flex items-center">
                   <div>{{ message.content }}</div>
-                  <div class="call-row-icon">
+                  <div class="ml-2">
                     <svg
                       v-if="message.callType === 'phone'"
                       xmlns="http://www.w3.org/2000/svg"

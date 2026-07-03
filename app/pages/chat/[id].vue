@@ -503,7 +503,7 @@
         </div>
       </div>
 
-      <div class="chat-preview-column">
+      <div class="xl:sticky xl:top-4 xl:self-start">
         <ChatPreview
           ref="chatPreviewRef"
           :chat-name="form.chatName"
@@ -520,47 +520,42 @@
 
     <div
       v-if="isSaving || isUploading"
-      class="loadingScreen"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 text-white"
     >
-      <div>
-        <div class="lds-ellipsis">
-          <div />
-          <div />
-          <div />
-          <div />
+      <div class="text-center">
+        <div class="mb-2 text-lg">
+          {{ isUploading ? 'Uploading ...' : 'Saving ...' }}
         </div>
-        <div>{{ isUploading ? 'Uploading ...' : 'Saving ...' }}</div>
       </div>
     </div>
 
     <div
       v-if="showImageModal"
-      class="image-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       role="dialog"
       aria-modal="true"
       aria-label="Generated image preview"
     >
-      <div class="image-modal-dialog">
-        <div class="image-modal-header">
-          <h3 class="image-modal-title">
+      <div class="max-h-[90vh] w-full max-w-3xl overflow-auto rounded-2xl bg-white p-4 shadow-xl">
+        <div class="mb-4 flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-slate-900">
             生成图片
           </h3>
           <button
             type="button"
-            class="image-modal-close"
+            class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700"
             aria-label="Close image preview"
             @click="showImageModal = false"
           >
             Close
           </button>
         </div>
-        <div class="modal-img">
-          <img
-            v-if="generatedImage"
-            :src="generatedImage"
-            alt="Generated chat preview"
-          >
-        </div>
+        <img
+          v-if="generatedImage"
+          :src="generatedImage"
+          alt="Generated chat preview"
+          class="w-full"
+        >
       </div>
     </div>
   </section>
@@ -682,5 +677,3 @@ onMounted(() => {
   loadChat()
 })
 </script>
-
-<style src="~/assets/css/wechat-chat.css"></style>
