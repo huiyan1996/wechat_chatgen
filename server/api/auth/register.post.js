@@ -1,15 +1,15 @@
 import bcrypt from 'bcryptjs'
-import { connectDB } from '../../utils/db'
+import { connectDBFromEvent } from '../../utils/db'
 import { User } from '../../models/User'
 import {
   sanitizeUser,
   setAuthCookie,
   signAuthToken,
 } from '../../utils/auth'
+import { getJwtSecret } from '../../utils/runtime-secrets'
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event)
-  await connectDB(config.mongoUri)
+  await connectDBFromEvent(event)
 
   const body = await readBody(event)
 
@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
       email: user.email,
       name: user.name,
     },
-    config.jwtSecret,
+    getJwtSecret(event),
   )
 
   setAuthCookie(event, token)

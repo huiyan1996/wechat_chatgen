@@ -37,15 +37,16 @@ export const getAuthTokenFromEvent = (event) => {
   return getCookie(event, AUTH_COOKIE) || null
 }
 
+import { getJwtSecret } from './runtime-secrets'
+
 export const getAuthUserFromEvent = (event) => {
-  const config = useRuntimeConfig(event)
   const token = getAuthTokenFromEvent(event)
 
   if (!token) {
     return null
   }
 
-  const payload = verifyAuthToken(token, config.jwtSecret)
+  const payload = verifyAuthToken(token, getJwtSecret(event))
 
   if (!payload?.userId) {
     return null

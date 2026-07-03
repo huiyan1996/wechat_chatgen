@@ -1,12 +1,11 @@
 import mongoose from 'mongoose'
-import { connectDB } from '../../../utils/db'
+import { connectDBFromEvent } from '../../../utils/db'
 import { Chat } from '../../../models/Chat'
 import { buildCreatedBy, getDocumentFilter, requireAuthUser, serializeChat, toObjectId } from '../../../utils/chat'
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event)
   const user = requireAuthUser(event)
-  await connectDB(config.mongoUri)
+  await connectDBFromEvent(event)
 
   const id = getRouterParam(event, 'id')
 

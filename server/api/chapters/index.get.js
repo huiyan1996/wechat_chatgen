@@ -1,11 +1,10 @@
-import { connectDB } from '../../utils/db'
+import { connectDBFromEvent } from '../../utils/db'
 import { Chat } from '../../models/Chat'
 import { getOwnerFilter, requireAuthUser } from '../../utils/chat'
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event)
   const user = requireAuthUser(event)
-  await connectDB(config.mongoUri)
+  await connectDBFromEvent(event)
 
   const chapters = await Chat.find(getOwnerFilter(user))
     .sort({ genTitle: 1 })
@@ -14,7 +13,7 @@ export default defineEventHandler(async (event) => {
   return {
     chapters: chapters.map((chapter) => ({
       id: chapter._id.toString(),
-      title: chapter.genTitle || '无标题',
+      title: chapter.genTitle || '无标�?,
       type: chapter.type || 'chat',
     })),
   }

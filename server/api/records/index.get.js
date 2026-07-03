@@ -1,4 +1,4 @@
-import { connectDB } from '../../utils/db'
+import { connectDBFromEvent } from '../../utils/db'
 import { Chat } from '../../models/Chat'
 import { getOwnerFilter, requireAuthUser, serializeChat } from '../../utils/chat'
 
@@ -27,9 +27,8 @@ const getSearchFilter = (query) => {
 }
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event)
   const user = requireAuthUser(event)
-  await connectDB(config.mongoUri)
+  await connectDBFromEvent(event)
 
   const query = getQuery(event)
   const records = await Chat.find({

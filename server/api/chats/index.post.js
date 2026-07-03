@@ -1,11 +1,10 @@
-import { connectDB } from '../../utils/db'
+import { connectDBFromEvent } from '../../utils/db'
 import { Chat } from '../../models/Chat'
 import { buildCreatedBy, requireAuthUser, serializeChat, toObjectId } from '../../utils/chat'
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event)
   const user = requireAuthUser(event)
-  await connectDB(config.mongoUri)
+  await connectDBFromEvent(event)
 
   const body = await readBody(event)
   const userId = toObjectId(user.id)
@@ -14,7 +13,7 @@ export default defineEventHandler(async (event) => {
     userId,
     createdBy: buildCreatedBy(user),
     type: 'chat',
-    genTitle: body?.genTitle || '捡手机文学',
+    genTitle: body?.genTitle || '捡手机文�?,
     author: body?.author || user.name || '无名',
     chatName: body?.chatName || '',
     chatType: body?.chatType || 'group',
