@@ -668,8 +668,6 @@ const handleGenerate = async () => {
 
   try {
     await generatePreviewImage(chatPreviewRef.value?.chatPageRef)
-  } catch {
-    saveError.value = '图片生成失败，请重试'
   } finally {
     isGenerating.value = false
   }

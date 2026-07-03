@@ -385,82 +385,15 @@ export const useChatEditor = (chatId) => {
     }
   }
 
-  const waitForImages = (root) => {
-    const images = root.querySelectorAll('img')
-
-    return Promise.all([...images].map((img) => {
-      if (img.complete) {
-        return Promise.resolve()
-      }
-
-      return new Promise((resolve) => {
-        img.onload = resolve
-        img.onerror = resolve
-      })
-    }))
-  }
-
-  const prepareCloneForCapture = (clone) => {
-    clone.classList.add('is-generating')
-    clone.style.position = 'fixed'
-    clone.style.left = '-10000px'
-    clone.style.top = '0'
-    clone.style.width = '400px'
-    clone.style.minWidth = '400px'
-    clone.style.maxWidth = '400px'
-    clone.style.zIndex = '-1'
-    clone.style.pointerEvents = 'none'
-
-    clone.querySelectorAll('.deleteBtn').forEach((button) => {
-      button.remove()
-    })
-
-    clone.querySelectorAll('[contenteditable]').forEach((node) => {
-      node.removeAttribute('contenteditable')
-    })
-  }
-
   const generatePreviewImage = async (element) => {
     if (!import.meta.client || !element) {
       return
     }
 
-    const clone = element.cloneNode(true)
-    prepareCloneForCapture(clone)
-    document.body.appendChild(clone)
-
-    try {
-      await waitForImages(clone)
-      await new Promise((resolve) => requestAnimationFrame(resolve))
-
-      const { default: html2canvas } = await import('html2canvas')
-      const canvas = await html2canvas(clone, {
-        useCORS: true,
-        allowTaint: true,
-        scale: 2,
-        backgroundColor: '#ebebeb',
-        scrollX: 0,
-        scrollY: 0,
-        width: 400,
-        windowWidth: 400,
-        onclone: (clonedDoc) => {
-          const clonedPage = clonedDoc.querySelector('.chat-page.is-generating')
-
-          if (!clonedPage) {
-            return
-          }
-
-          clonedPage.style.position = 'relative'
-          clonedPage.style.left = '0'
-          clonedPage.style.top = '0'
-        },
-      })
-
-      generatedImage.value = canvas.toDataURL('image/png')
-      showImageModal.value = true
-    } finally {
-      document.body.removeChild(clone)
-    }
+    const { default: html2canvas } = await import('html2canvas')
+    const canvas = await html2canvas(element, { useCORS: true })
+    generatedImage.value = canvas.toDataURL('image/png')
+    showImageModal.value = true
   }
 
   return {

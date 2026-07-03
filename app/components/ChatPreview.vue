@@ -2,7 +2,6 @@
   <section
     ref="chatPageRef"
     class="chat-page"
-    :class="{ 'is-generating': isGenerating }"
   >
     <header class="chat-page-header">
       <div class="nav-back">
@@ -18,7 +17,10 @@
     </header>
 
     <main>
-      <div class="message-list">
+      <div
+        class="message-list"
+        :class="{ 'is-generating': isGenerating }"
+      >
         <template
           v-for="(message, index) in chatList"
           :key="index"
