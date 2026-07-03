@@ -2,6 +2,15 @@ import jwt from 'jsonwebtoken'
 
 const AUTH_COOKIE = 'chatgen_token'
 const TOKEN_MAX_AGE = 60 * 60 * 24 * 7
+const MASTER_ACCOUNT_EMAIL = 'chunling1996@hotmail.com'
+
+export const isMasterEmail = (email) => {
+  return String(email || '').trim().toLowerCase() === MASTER_ACCOUNT_EMAIL
+}
+
+export const isMasterUser = (user) => {
+  return Boolean(user?.isMaster) || isMasterEmail(user?.email)
+}
 
 export const getAuthCookieName = () => AUTH_COOKIE
 
@@ -56,6 +65,7 @@ export const getAuthUserFromEvent = (event) => {
     id: payload.userId,
     email: payload.email,
     name: payload.name,
+    isMaster: Boolean(payload.isMaster) || isMasterEmail(payload.email),
   }
 }
 
@@ -65,5 +75,6 @@ export const sanitizeUser = (user) => {
     name: user.name,
     email: user.email,
     createdAt: user.createdAt,
+    isMaster: isMasterEmail(user.email),
   }
 }

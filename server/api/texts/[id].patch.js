@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { connectDBFromEvent } from '../../utils/db'
 import { Chat } from '../../models/Chat'
-import { buildCreatedBy, getDocumentFilter, requireAuthUser, serializeChat } from '../../utils/chat'
+import { applyCreatedByIfOwner, getDocumentFilter, requireAuthUser, serializeChat } from '../../utils/chat'
 
 export default defineEventHandler(async (event) => {
   const user = requireAuthUser(event)
@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
       : null
   }
 
-  text.createdBy = buildCreatedBy(user)
+  applyCreatedByIfOwner(user, text)
 
   await text.save()
 

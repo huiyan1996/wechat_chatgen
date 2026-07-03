@@ -6,7 +6,7 @@
           列表
         </h1>
         <p class="mt-2 text-slate-600">
-          你创建的所有聊天与文本记录
+          {{ listingDescription }}
         </p>
       </div>
 
@@ -156,6 +156,12 @@
         <p class="mt-1 text-xs text-slate-500">
           创建: {{ formatDate(record.createdAt) }}
         </p>
+        <p
+          v-if="isMasterAccount && record.createdBy?.name"
+          class="mt-1 text-xs text-slate-500"
+        >
+          创建者: {{ record.createdBy.name }}
+        </p>
 
         <div class="mt-4 flex flex-wrap gap-2">
           <NuxtLink
@@ -208,6 +214,16 @@
 definePageMeta({
   layout: 'app',
   middleware: 'auth',
+})
+
+const { user } = useAuth()
+const isMasterAccount = computed(() => Boolean(user.value?.isMaster))
+const listingDescription = computed(() => {
+  if (isMasterAccount.value) {
+    return '所有用户的聊天与文本记录'
+  }
+
+  return '你创建的所有聊天与文本记录'
 })
 
 const records = ref([])

@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import { connectDBFromEvent } from '../../utils/db'
 import { User } from '../../models/User'
 import {
+  isMasterEmail,
   sanitizeUser,
   setAuthCookie,
   signAuthToken,
@@ -67,6 +68,7 @@ export default defineEventHandler(async (event) => {
       userId: user._id.toString(),
       email: user.email,
       name: user.name,
+      isMaster: isMasterEmail(user.email),
     },
     getJwtSecret(event),
   )

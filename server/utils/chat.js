@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { getAuthUserFromEvent } from './auth'
+import { getAuthUserFromEvent, isMasterUser } from './auth'
 
 export const requireAuthUser = (event) => {
   const user = getAuthUserFromEvent(event)
@@ -30,6 +30,10 @@ export const buildCreatedBy = (user) => {
 }
 
 export const getOwnerFilter = (user) => {
+  if (isMasterUser(user)) {
+    return {}
+  }
+
   const userId = toObjectId(user.id)
 
   if (!userId) {
@@ -40,6 +44,14 @@ export const getOwnerFilter = (user) => {
   }
 
   return { userId }
+}
+
+export const applyCreatedByIfOwner = (user, document) => {
+  if (isMasterUser(user) && document.userId?.toString() !== user.id) {
+    return
+  }
+
+  document.createdBy = buildCreatedBy(user)
 }
 
 export const getChatListFilter = (user) => ({
