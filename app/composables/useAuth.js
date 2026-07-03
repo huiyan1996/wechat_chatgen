@@ -4,18 +4,9 @@ export const useAuth = () => {
 
   const fetchUser = async () => {
     try {
-      if (import.meta.server) {
-        const event = useRequestEvent()
-
-        if (event) {
-          const { getAuthUserFromEvent } = await import('~/server/utils/auth')
-          const authUser = getAuthUserFromEvent(event)
-          user.value = authUser
-          return authUser
-        }
-      }
-
-      const response = await $fetch('/api/auth/me')
+      const response = await $fetch('/api/auth/me', {
+        headers: import.meta.server ? useRequestHeaders(['cookie']) : undefined,
+      })
       user.value = response.user
       return response.user
     } catch {
