@@ -428,6 +428,11 @@ export const useChatEditor = (chatId) => {
       item.style.boxSizing = 'border-box'
     })
 
+    root.querySelectorAll('.message-bubble, .time-badge, .leftName').forEach((el) => {
+      el.style.marginTop = '0px'
+      el.style.marginBottom = '0px'
+    })
+
     root.querySelectorAll('.badge-block, .imgCenter-badge').forEach((block) => {
       block.style.margin = '0 auto'
       block.style.paddingTop = '5px'
@@ -442,6 +447,7 @@ export const useChatEditor = (chatId) => {
 
     root.querySelectorAll('.message-bubble[contenteditable]').forEach((bubble) => {
       bubble.removeAttribute('contenteditable')
+      bubble.style.userSelect = 'none'
     })
   }
 
@@ -476,8 +482,18 @@ export const useChatEditor = (chatId) => {
 
     root.querySelectorAll('.leftName').forEach((name) => {
       name.style.marginTop = ''
+      name.style.marginBottom = ''
       name.style.position = ''
       name.style.top = ''
+    })
+
+    root.querySelectorAll('.message-bubble, .time-badge').forEach((el) => {
+      el.style.marginTop = ''
+      el.style.marginBottom = ''
+    })
+
+    root.querySelectorAll('.message-bubble').forEach((bubble) => {
+      bubble.style.userSelect = ''
     })
   }
 
