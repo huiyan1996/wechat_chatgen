@@ -385,16 +385,20 @@ export const useChatEditor = (chatId) => {
     }
   }
 
+  const PREVIEW_EXPORT_WIDTH = 2000
+
   const generatePreviewImage = async (element) => {
     if (!import.meta.client || !element) {
       return
     }
 
     const { toPng } = await import('html-to-image')
+    const elementWidth = element.offsetWidth || element.clientWidth
+    const pixelRatio = elementWidth > 0 ? PREVIEW_EXPORT_WIDTH / elementWidth : 5
 
     generatedImage.value = await toPng(element, {
       cacheBust: true,
-      pixelRatio: 3,
+      pixelRatio,
       backgroundColor: '#ebebeb',
       filter: (node) => !(node instanceof Element && node.classList.contains('deleteBtn')),
     })
