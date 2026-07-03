@@ -449,9 +449,9 @@
 }
 
 .image-modal-dialog {
-  max-height: 95vh;
+  max-height: 90vh;
   width: 100%;
-  max-width: min(1200px, 95vw);
+  max-width: 48rem;
   overflow: auto;
   background: #fff;
   padding: 1rem;
@@ -481,8 +481,5 @@
 }
 
 .modal-img img {
-  display: block;
-  width: 100%;
   max-width: 100%;
-  height: auto;
 }

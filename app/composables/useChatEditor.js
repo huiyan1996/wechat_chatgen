@@ -394,7 +394,7 @@ export const useChatEditor = (chatId) => {
 
     generatedImage.value = await toPng(element, {
       cacheBust: true,
-      pixelRatio: 3,
+      pixelRatio: 2,
       backgroundColor: '#ebebeb',
       filter: (node) => !(node instanceof Element && node.classList.contains('deleteBtn')),
     })
