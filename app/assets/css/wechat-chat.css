@@ -24,7 +24,6 @@
 
 .chat-page .nav-back {
   height: 100%;
-  line-height: 44px;
   width: 66px;
   font-size: 16px;
   font-weight: lighter;
@@ -47,7 +46,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  line-height: 50px;
+  line-height: normal;
+  display: flex;
+  align-items: center;
 }
 
 .chat-page .nav-person {
@@ -338,6 +339,11 @@
 .chat-page > main > .message-list {
   display: flow-root;
   max-height: 85vh;
+}
+
+.chat-page.is-capturing {
+  position: relative !important;
+  top: auto !important;
 }
 
 .chat-page.is-capturing main {
