@@ -13,8 +13,8 @@ export default defineEventHandler(async (event) => {
     userId: toObjectId(user.id),
     createdBy: buildCreatedBy(user),
     type: 'text',
-    genTitle: body?.genTitle || '???',
-    author: body?.author || user.name || '??',
+    genTitle: body?.genTitle || '\u65b0\u6587\u672c',
+    author: body?.author || user.name || '\u65e0\u540d',
     chatList: [{
       type: 'text',
       content,
