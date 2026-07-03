@@ -40,7 +40,7 @@
               :style="{ backgroundImage: `url(${message.user_img || defaultImg})` }"
             />
 
-            <div>
+            <div class="message-body">
               <div
                 v-if="message.side === 'left' && chatType !== 'private'"
                 class="text-start leftName"
@@ -112,7 +112,7 @@
 
           <div
             v-else-if="message.type === 'time' || message.type === 'timepass'"
-            class="message-list msg-item"
+            class="msg-item msg-meta"
           >
             <div class="badge-block">
               <span
@@ -127,7 +127,7 @@
 
           <div
             v-else-if="message.type === 'imgCenter'"
-            class="message-list msg-item"
+            class="msg-item msg-meta"
           >
             <div class="imgCenter-badge">
               <img
