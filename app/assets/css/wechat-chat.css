@@ -341,11 +341,13 @@
 }
 
 .chat-page.is-capturing main {
-  overflow: hidden;
+  overflow: visible;
+  max-height: none;
 }
 
 .chat-page.is-capturing > main > .message-list {
   max-height: none;
+  overflow: visible;
 }
 
 .chat-page.is-capturing .msg-item {

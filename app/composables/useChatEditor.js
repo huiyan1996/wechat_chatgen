@@ -410,6 +410,18 @@ export const useChatEditor = (chatId) => {
       return
     }
 
+    const main = root.querySelector('main')
+
+    if (main) {
+      main.style.maxHeight = 'none'
+      main.style.overflow = 'visible'
+    }
+
+    root.querySelectorAll('.message-list').forEach((list) => {
+      list.style.maxHeight = 'none'
+      list.style.overflow = 'visible'
+    })
+
     root.querySelectorAll('.msg-item').forEach((item) => {
       item.style.marginTop = '0'
       item.style.paddingTop = '8px'
@@ -448,8 +460,16 @@ export const useChatEditor = (chatId) => {
     chatPage.classList.add('is-capturing')
     applyCaptureLayout(chatPage)
 
+    const main = chatPage.querySelector('main')
+
     if (messageList) {
-      messageList.style.maxHeight = 'unset'
+      messageList.style.maxHeight = 'none'
+      messageList.style.overflow = 'visible'
+    }
+
+    if (main) {
+      main.style.maxHeight = 'none'
+      main.style.overflow = 'visible'
     }
 
     try {
@@ -489,8 +509,14 @@ export const useChatEditor = (chatId) => {
         name.style.top = ''
       })
 
+      if (main) {
+        main.style.maxHeight = ''
+        main.style.overflow = ''
+      }
+
       if (messageList) {
         messageList.style.maxHeight = '85vh'
+        messageList.style.overflow = ''
       }
     }
   }
