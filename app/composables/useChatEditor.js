@@ -405,6 +405,34 @@ export const useChatEditor = (chatId) => {
     return null
   }
 
+  const applyCaptureLayout = (root) => {
+    if (!root) {
+      return
+    }
+
+    root.querySelectorAll('.msg-item').forEach((item) => {
+      item.style.marginTop = '0'
+      item.style.paddingTop = '8px'
+      item.style.boxSizing = 'border-box'
+    })
+
+    root.querySelectorAll('.badge-block, .imgCenter-badge').forEach((block) => {
+      block.style.margin = '0 auto'
+      block.style.paddingTop = '5px'
+      block.style.paddingBottom = '5px'
+    })
+
+    root.querySelectorAll('.leftName').forEach((name) => {
+      name.style.marginTop = '0'
+      name.style.position = 'relative'
+      name.style.top = '-3px'
+    })
+
+    root.querySelectorAll('.message-bubble[contenteditable]').forEach((bubble) => {
+      bubble.removeAttribute('contenteditable')
+    })
+  }
+
   const captureChatCanvas = async (chatPreview, options = {}) => {
     if (!import.meta.client || !chatPreview) {
       return null
@@ -418,6 +446,7 @@ export const useChatEditor = (chatId) => {
     }
 
     chatPage.classList.add('is-capturing')
+    applyCaptureLayout(chatPage)
 
     if (messageList) {
       messageList.style.maxHeight = 'unset'
@@ -425,16 +454,40 @@ export const useChatEditor = (chatId) => {
 
     try {
       const { default: html2canvas } = await import('html2canvas')
+      const { onclone: userOnclone, ...html2canvasOptions } = options
+
       return await html2canvas(chatPage, {
         useCORS: true,
         scrollX: 0,
         scrollY: -window.scrollY,
         windowWidth: chatPage.scrollWidth,
         windowHeight: chatPage.scrollHeight,
-        ...options,
+        ...html2canvasOptions,
+        onclone: (clonedDoc, element) => {
+          applyCaptureLayout(clonedDoc.querySelector('.chat-page.is-capturing'))
+          userOnclone?.(clonedDoc, element)
+        },
       })
     } finally {
       chatPage.classList.remove('is-capturing')
+
+      chatPage.querySelectorAll('.msg-item').forEach((item) => {
+        item.style.marginTop = ''
+        item.style.paddingTop = ''
+        item.style.boxSizing = ''
+      })
+
+      chatPage.querySelectorAll('.badge-block, .imgCenter-badge').forEach((block) => {
+        block.style.margin = ''
+        block.style.paddingTop = ''
+        block.style.paddingBottom = ''
+      })
+
+      chatPage.querySelectorAll('.leftName').forEach((name) => {
+        name.style.marginTop = ''
+        name.style.position = ''
+        name.style.top = ''
+      })
 
       if (messageList) {
         messageList.style.maxHeight = '85vh'
