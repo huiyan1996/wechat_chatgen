@@ -57,10 +57,10 @@
               @click="emit('change-side', index)"
             />
 
-            <div>
+            <div class="message-body">
               <div
                 v-if="message.side === 'left' && chatType !== 'private'"
-                class="text-start leftName"
+                class="leftName"
               >
                 {{ message.name }}
               </div>
@@ -71,7 +71,7 @@
                 contenteditable
                 @blur="emit('edit-content', index, $event.target.textContent)"
               >
-                {{ message.content }}
+                <span class="message-bubble-text">{{ message.content }}</span>
               </div>
 
               <div

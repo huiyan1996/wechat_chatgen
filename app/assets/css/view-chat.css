@@ -61,7 +61,7 @@
   min-height: 40px;
 }
 
-.chat-page.chat-view-page .message-item > div {
+.chat-page.chat-view-page .message-body {
   min-width: 0;
 }
 

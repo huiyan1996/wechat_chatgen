@@ -40,10 +40,10 @@
               :style="{ backgroundImage: `url(${message.user_img || defaultImg})` }"
             />
 
-            <div>
+            <div class="message-body">
               <div
                 v-if="message.side === 'left' && chatType !== 'private'"
-                class="text-start leftName"
+                class="leftName"
               >
                 {{ message.name }}
               </div>
@@ -52,7 +52,7 @@
                 v-if="message.type === 'text'"
                 class="message-bubble"
               >
-                {{ message.content }}
+                <span class="message-bubble-text">{{ message.content }}</span>
               </div>
 
               <div
