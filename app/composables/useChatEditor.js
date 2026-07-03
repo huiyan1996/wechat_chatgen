@@ -400,60 +400,24 @@ export const useChatEditor = (chatId) => {
     }))
   }
 
-  const syncLiveContentToClone = (source, clone) => {
-    const liveBubbles = source.querySelectorAll('.message-bubble')
-    const cloneBubbles = clone.querySelectorAll('.message-bubble')
-
-    liveBubbles.forEach((liveBubble, index) => {
-      const cloneBubble = cloneBubbles[index]
-
-      if (!cloneBubble) {
-        return
-      }
-
-      cloneBubble.textContent = liveBubble.textContent || ''
-    })
-  }
-
-  const normalizeCloneForCapture = (clone) => {
-    clone.querySelectorAll('.message-bubble[contenteditable]').forEach((bubble) => {
-      bubble.removeAttribute('contenteditable')
-    })
-
-    clone.querySelectorAll('.message-bubble').forEach((bubble) => {
-      bubble.style.display = 'inline-block'
-      bubble.style.lineHeight = '1.5'
-      bubble.style.boxSizing = 'border-box'
-      bubble.style.verticalAlign = 'top'
-    })
-
-    clone.querySelectorAll('.leftName').forEach((name) => {
-      name.style.marginTop = '0'
-      name.style.marginBottom = '2px'
-    })
-
-    clone.querySelectorAll('.message-item').forEach((item) => {
-      item.style.alignItems = 'flex-start'
-    })
-  }
-
   const prepareCloneForCapture = (clone) => {
     clone.classList.add('is-generating')
-    clone.style.position = 'absolute'
-    clone.style.left = '0'
+    clone.style.position = 'fixed'
+    clone.style.left = '-10000px'
     clone.style.top = '0'
     clone.style.width = '400px'
     clone.style.minWidth = '400px'
     clone.style.maxWidth = '400px'
     clone.style.zIndex = '-1'
     clone.style.pointerEvents = 'none'
-    clone.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
 
     clone.querySelectorAll('.deleteBtn').forEach((button) => {
       button.remove()
     })
 
-    normalizeCloneForCapture(clone)
+    clone.querySelectorAll('[contenteditable]').forEach((node) => {
+      node.removeAttribute('contenteditable')
+    })
   }
 
   const generatePreviewImage = async (element) => {
@@ -461,20 +425,9 @@ export const useChatEditor = (chatId) => {
       return
     }
 
-    const wrapper = document.createElement('div')
-    wrapper.style.position = 'fixed'
-    wrapper.style.left = '0'
-    wrapper.style.top = '0'
-    wrapper.style.width = '400px'
-    wrapper.style.overflow = 'visible'
-    wrapper.style.zIndex = '-1'
-    wrapper.style.pointerEvents = 'none'
-
     const clone = element.cloneNode(true)
     prepareCloneForCapture(clone)
-    syncLiveContentToClone(element, clone)
-    wrapper.appendChild(clone)
-    document.body.appendChild(wrapper)
+    document.body.appendChild(clone)
 
     try {
       await waitForImages(clone)
@@ -486,19 +439,27 @@ export const useChatEditor = (chatId) => {
         allowTaint: true,
         scale: 2,
         backgroundColor: '#ebebeb',
-        foreignObjectRendering: false,
         scrollX: 0,
         scrollY: 0,
         width: 400,
-        height: clone.scrollHeight,
         windowWidth: 400,
-        windowHeight: clone.scrollHeight,
+        onclone: (clonedDoc) => {
+          const clonedPage = clonedDoc.querySelector('.chat-page.is-generating')
+
+          if (!clonedPage) {
+            return
+          }
+
+          clonedPage.style.position = 'relative'
+          clonedPage.style.left = '0'
+          clonedPage.style.top = '0'
+        },
       })
 
       generatedImage.value = canvas.toDataURL('image/png')
       showImageModal.value = true
     } finally {
-      document.body.removeChild(wrapper)
+      document.body.removeChild(clone)
     }
   }
 
