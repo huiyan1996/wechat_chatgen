@@ -425,6 +425,10 @@ export const useChatEditor = (chatId) => {
       const { default: html2canvas } = await import('html2canvas')
       return await html2canvas(chatPage, {
         useCORS: true,
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        windowWidth: chatPage.scrollWidth,
+        windowHeight: chatPage.scrollHeight,
         ...options,
       })
     } finally {
