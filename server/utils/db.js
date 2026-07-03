@@ -1,19 +1,55 @@
 import mongoose from 'mongoose'
+import { createError } from 'h3'
 import { getMongoUri } from './runtime-secrets'
 
-let isConnected = false
+const CONNECTION_OPTIONS = {
+  serverSelectionTimeoutMS: 8000,
+  socketTimeoutMS: 10000,
+  maxPoolSize: 5,
+}
 
-export const connectDB = async (mongoUri) => {
-  if (isConnected) {
-    return mongoose.connection
+const getCachedConnection = () => {
+  if (!globalThis.__chatgenMongoose) {
+    globalThis.__chatgenMongoose = {
+      conn: null,
+      promise: null,
+    }
   }
 
-  mongoose.set('strictQuery', true)
+  return globalThis.__chatgenMongoose
+}
 
-  await mongoose.connect(mongoUri)
-  isConnected = true
+export const connectDB = async (mongoUri) => {
+  if (!mongoUri) {
+    throw createError({
+      statusCode: 503,
+      statusMessage: 'Database is not configured. Set MONGODB_URI in Netlify environment variables.',
+    })
+  }
 
-  return mongoose.connection
+  const cached = getCachedConnection()
+
+  if (cached.conn?.readyState === 1) {
+    return cached.conn
+  }
+
+  if (!cached.promise) {
+    mongoose.set('strictQuery', true)
+
+    cached.promise = mongoose.connect(mongoUri, CONNECTION_OPTIONS).then((connection) => {
+      cached.conn = connection
+      return connection
+    }).catch((error) => {
+      cached.promise = null
+      cached.conn = null
+      throw createError({
+        statusCode: 503,
+        statusMessage: `Database connection failed: ${error.message}`,
+      })
+    })
+  }
+
+  return cached.promise
 }
 
 export const connectDBFromEvent = async (event) => {

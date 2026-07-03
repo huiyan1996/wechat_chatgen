@@ -4,4 +4,9 @@
 
 [build.environment]
   NODE_VERSION = "22"
-  SECRETS_SCAN_OMIT_KEYS = "JWT_SECRET,MONGODB_URI"
+  NETLIFY = "true"
+  SECRETS_SCAN_OMIT_KEYS = "JWT_SECRET,MONGODB_URI,NUXT_JWT_SECRET,NUXT_MONGO_URI"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["mongoose", "bcryptjs", "jsonwebtoken"]
