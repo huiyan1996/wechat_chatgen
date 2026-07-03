@@ -9,6 +9,8 @@ export const useChatEditor = (chatId) => {
   const saveError = ref('')
   const generatedImage = ref('')
   const showImageModal = ref(false)
+  const isDownloadingPng = ref(false)
+  const downloadPngError = ref('')
   const chapterOptions = ref([])
 
   const form = reactive({
@@ -396,6 +398,46 @@ export const useChatEditor = (chatId) => {
     showImageModal.value = true
   }
 
+  const downloadPreviewPng = async (element) => {
+    if (!import.meta.client || !element) {
+      return
+    }
+
+    isDownloadingPng.value = true
+    downloadPngError.value = ''
+
+    try {
+      const { default: html2canvas } = await import('html2canvas')
+      const canvas = await html2canvas(element, {
+        useCORS: true,
+        scale: 3,
+      })
+
+      const blob = await new Promise((resolve, reject) => {
+        canvas.toBlob((result) => {
+          if (result) {
+            resolve(result)
+            return
+          }
+
+          reject(new Error('Failed to create PNG blob'))
+        }, 'image/png')
+      })
+
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'render.png'
+      link.click()
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('PNG download failed:', error)
+      downloadPngError.value = 'PNG 下载失败，请重试'
+    } finally {
+      isDownloadingPng.value = false
+    }
+  }
+
   return {
     isLoading,
     isSaving,
@@ -405,6 +447,8 @@ export const useChatEditor = (chatId) => {
     isUploading,
     generatedImage,
     showImageModal,
+    isDownloadingPng,
+    downloadPngError,
     chapterOptions,
     form,
     userList,
@@ -447,5 +491,6 @@ export const useChatEditor = (chatId) => {
     changeMessageSide,
     updateMessageContent,
     generatePreviewImage,
+    downloadPreviewPng,
   }
 }

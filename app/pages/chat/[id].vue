@@ -503,18 +503,36 @@
         </div>
       </div>
 
-      <div class="xl:sticky xl:top-4 xl:self-start">
+      <div class="xl:sticky xl:top-4 xl:self-start space-y-3">
         <ChatPreview
           ref="chatPreviewRef"
           :chat-name="form.chatName"
           :chat-type="chatType"
           :chat-list="chatList"
           :default-img="defaultImg"
-          :is-generating="isGenerating"
+          :is-generating="isGenerating || isDownloadingPng"
           @delete-message="deleteMessage"
           @change-side="changeMessageSide"
           @edit-content="updateMessageContent"
         />
+
+        <button
+          type="button"
+          class="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+          :disabled="isDownloadingPng"
+          aria-label="Download PNG"
+          @click="handleDownloadPng"
+        >
+          {{ isDownloadingPng ? 'Generating...' : 'Download PNG' }}
+        </button>
+
+        <p
+          v-if="downloadPngError"
+          class="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700"
+          role="alert"
+        >
+          {{ downloadPngError }}
+        </p>
       </div>
     </div>
 
@@ -579,6 +597,8 @@ const {
   isUploading,
   generatedImage,
   showImageModal,
+  isDownloadingPng,
+  downloadPngError,
   chapterOptions,
   form,
   userList,
@@ -621,6 +641,7 @@ const {
   changeMessageSide,
   updateMessageContent,
   generatePreviewImage,
+  downloadPreviewPng,
 } = useChatEditor()
 
 const characterImageEvent = ref(null)
@@ -671,6 +692,12 @@ const handleGenerate = async () => {
   } finally {
     isGenerating.value = false
   }
+}
+
+const handleDownloadPng = async () => {
+  await nextTick()
+
+  await downloadPreviewPng(chatPreviewRef.value?.chatPageRef)
 }
 
 onMounted(() => {
