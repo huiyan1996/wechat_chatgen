@@ -390,14 +390,9 @@ export const useChatEditor = (chatId) => {
       return
     }
 
-    const { toPng } = await import('html-to-image')
-
-    generatedImage.value = await toPng(element, {
-      cacheBust: true,
-      pixelRatio: 2,
-      backgroundColor: '#ebebeb',
-      filter: (node) => !(node instanceof Element && node.classList.contains('deleteBtn')),
-    })
+    const { default: html2canvas } = await import('html2canvas')
+    const canvas = await html2canvas(element, { useCORS: true })
+    generatedImage.value = canvas.toDataURL('image/png')
     showImageModal.value = true
   }
 
