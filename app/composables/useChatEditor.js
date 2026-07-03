@@ -425,6 +425,46 @@ export const useChatEditor = (chatId) => {
     })
   }
 
+  const applyCaptureScrollFixes = (root) => {
+    if (!root) {
+      return
+    }
+
+    const main = root.querySelector('main')
+
+    if (main) {
+      main.style.maxHeight = 'none'
+      main.style.minHeight = '0'
+      main.style.overflow = 'visible'
+      main.style.paddingTop = '0'
+    }
+
+    root.querySelectorAll('.message-list').forEach((list) => {
+      list.style.maxHeight = 'none'
+      list.style.overflow = 'visible'
+    })
+  }
+
+  const resetCaptureScrollFixes = (root) => {
+    if (!root) {
+      return
+    }
+
+    const main = root.querySelector('main')
+
+    if (main) {
+      main.style.maxHeight = ''
+      main.style.minHeight = ''
+      main.style.overflow = ''
+      main.style.paddingTop = ''
+    }
+
+    root.querySelectorAll('.message-list').forEach((list) => {
+      list.style.maxHeight = ''
+      list.style.overflow = ''
+    })
+  }
+
   const applyCaptureLayout = (root, options = {}) => {
     const { normalizeText = false } = options
 
@@ -463,35 +503,43 @@ export const useChatEditor = (chatId) => {
     }
 
     root.querySelectorAll('.message-item').forEach((item) => {
-      item.style.display = 'table'
+      item.style.display = 'flex'
+      item.style.alignItems = 'flex-start'
       item.style.width = '100%'
-      item.style.tableLayout = 'auto'
-      item.style.borderCollapse = 'collapse'
-
-      if (item.classList.contains('message-item--right')) {
-        item.style.direction = 'rtl'
-      }
+      item.style.position = 'relative'
+      item.style.flexDirection = item.classList.contains('message-item--right')
+        ? 'row-reverse'
+        : 'row'
     })
 
     root.querySelectorAll('.message-item .avatar').forEach((avatar) => {
-      avatar.style.display = 'table-cell'
-      avatar.style.verticalAlign = 'top'
-      avatar.style.width = '60px'
-      avatar.style.direction = 'ltr'
+      avatar.style.flexShrink = '0'
+      avatar.style.width = '40px'
+      avatar.style.height = '40px'
+      avatar.style.minWidth = '40px'
+      avatar.style.minHeight = '40px'
+
+      if (avatar.tagName === 'IMG') {
+        avatar.style.objectFit = 'cover'
+      } else {
+        avatar.style.backgroundSize = 'cover'
+        avatar.style.backgroundPosition = 'center'
+      }
     })
 
     root.querySelectorAll('.message-body').forEach((body) => {
-      body.style.display = 'table-cell'
-      body.style.verticalAlign = 'top'
-      body.style.width = 'auto'
+      body.style.display = 'flex'
+      body.style.flexDirection = 'column'
+      body.style.flex = '1'
+      body.style.minWidth = '0'
+      body.style.gap = '0'
       body.style.lineHeight = 'normal'
-      body.style.direction = 'ltr'
 
       const messageItem = body.closest('.message-item')
 
-      if (messageItem?.classList.contains('message-item--right')) {
-        body.style.textAlign = 'right'
-      }
+      body.style.alignItems = messageItem?.classList.contains('message-item--right')
+        ? 'flex-end'
+        : 'flex-start'
     })
 
     if (normalizeText) {
@@ -545,100 +593,6 @@ export const useChatEditor = (chatId) => {
     })
   }
 
-  const resetCaptureLayout = (root) => {
-    if (!root) {
-      return
-    }
-
-    const main = root.querySelector('main')
-
-    if (main) {
-      main.style.maxHeight = ''
-      main.style.minHeight = ''
-      main.style.overflow = ''
-      main.style.paddingTop = ''
-    }
-
-    root.querySelectorAll('.message-list').forEach((list) => {
-      list.style.maxHeight = ''
-      list.style.overflow = ''
-    })
-
-    root.querySelectorAll('.msg-item').forEach((item) => {
-      item.style.marginTop = ''
-      item.style.paddingTop = ''
-      item.style.boxSizing = ''
-    })
-
-    root.querySelectorAll('.msg-meta').forEach((item) => {
-      item.style.paddingTop = ''
-    })
-
-    root.querySelectorAll('.message-item').forEach((item) => {
-      item.style.display = ''
-      item.style.width = ''
-      item.style.tableLayout = ''
-      item.style.borderCollapse = ''
-      item.style.direction = ''
-    })
-
-    root.querySelectorAll('.message-item .avatar').forEach((avatar) => {
-      avatar.style.display = ''
-      avatar.style.verticalAlign = ''
-      avatar.style.width = ''
-      avatar.style.direction = ''
-    })
-
-    root.querySelectorAll('.message-body').forEach((body) => {
-      body.style.display = ''
-      body.style.verticalAlign = ''
-      body.style.width = ''
-      body.style.lineHeight = ''
-      body.style.direction = ''
-      body.style.textAlign = ''
-    })
-
-    root.querySelectorAll('.badge-block, .imgCenter-badge').forEach((block) => {
-      block.style.margin = ''
-      block.style.padding = ''
-    })
-
-    root.querySelectorAll('.leftName').forEach((name) => {
-      name.style.margin = ''
-      name.style.padding = ''
-      name.style.lineHeight = ''
-      name.style.minHeight = ''
-      name.style.height = ''
-      name.style.overflow = ''
-      name.style.display = ''
-      name.style.fontSize = ''
-    })
-
-    root.querySelectorAll('.message-bubble, .time-badge').forEach((el) => {
-      el.style.margin = ''
-      el.style.verticalAlign = ''
-    })
-
-    root.querySelectorAll('.message-bubble').forEach((bubble) => {
-      bubble.style.display = ''
-      bubble.style.lineHeight = ''
-      bubble.style.padding = ''
-      bubble.style.fontSize = ''
-      bubble.style.userSelect = ''
-      bubble.style.verticalAlign = ''
-      bubble.style.height = ''
-    })
-
-    root.querySelectorAll('.message-bubble-text').forEach((textNode) => {
-      textNode.style.display = ''
-      textNode.style.margin = ''
-      textNode.style.padding = ''
-      textNode.style.lineHeight = ''
-      textNode.style.fontSize = ''
-      textNode.style.verticalAlign = ''
-    })
-  }
-
   const captureChatCanvas = async (chatPreview, options = {}) => {
     if (!import.meta.client || !chatPreview) {
       return null
@@ -651,7 +605,7 @@ export const useChatEditor = (chatId) => {
     }
 
     chatPage.classList.add('is-capturing')
-    applyCaptureLayout(chatPage)
+    applyCaptureScrollFixes(chatPage)
 
     try {
       const { default: html2canvas } = await import('html2canvas')
@@ -678,7 +632,7 @@ export const useChatEditor = (chatId) => {
       })
     } finally {
       chatPage.classList.remove('is-capturing')
-      resetCaptureLayout(chatPage)
+      resetCaptureScrollFixes(chatPage)
     }
   }
 

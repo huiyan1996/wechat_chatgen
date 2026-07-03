@@ -410,36 +410,41 @@
 }
 
 .chat-page.is-capturing .message-item {
-  display: table;
+  display: flex !important;
+  align-items: flex-start !important;
   width: 100%;
-  table-layout: auto;
-  border-collapse: collapse;
-}
-
-.chat-page.is-capturing .message-item .avatar {
-  display: table-cell;
-  vertical-align: top;
-  width: 60px;
-}
-
-.chat-page.is-capturing .message-body {
-  display: table-cell;
-  vertical-align: top;
-  width: auto;
-  line-height: normal;
 }
 
 .chat-page.is-capturing .message-item--right {
-  direction: rtl;
+  flex-direction: row-reverse !important;
 }
 
-.chat-page.is-capturing .message-item--right .avatar,
-.chat-page.is-capturing .message-item--right .message-body {
-  direction: ltr;
+.chat-page.is-capturing .message-item .avatar {
+  flex-shrink: 0;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px;
+  min-height: 40px;
+  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+}
+
+.chat-page.is-capturing .message-body {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1;
+  min-width: 0;
+  gap: 0;
+  line-height: normal;
+}
+
+.chat-page.is-capturing .message-item--left .message-body {
+  align-items: flex-start !important;
 }
 
 .chat-page.is-capturing .message-item--right .message-body {
-  text-align: right;
+  align-items: flex-end !important;
 }
 
 .chat-page.is-capturing .msg-item {
