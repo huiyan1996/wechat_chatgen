@@ -14,8 +14,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss'],
   runtimeConfig: {
-    jwtSecret: process.env.JWT_SECRET || 'chatgen-dev-secret-change-in-production',
-    mongoUri: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/chatgen',
+    jwtSecret: '',
+    mongoUri: '',
+    $development: {
+      jwtSecret: 'chatgen-dev-secret-change-in-production',
+      mongoUri: 'mongodb://127.0.0.1:27017/chatgen',
+    },
     public: {
       appName: 'ChatGen',
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || 'dm8co83yz',
