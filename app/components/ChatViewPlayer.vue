@@ -112,7 +112,7 @@
 
           <div
             v-else-if="message.type === 'time' || message.type === 'timepass'"
-            class="msg-item msg-meta"
+            class="message-list msg-item"
           >
             <div class="badge-block">
               <span
@@ -127,7 +127,7 @@
 
           <div
             v-else-if="message.type === 'imgCenter'"
-            class="msg-item msg-meta"
+            class="message-list msg-item"
           >
             <div class="imgCenter-badge">
               <img

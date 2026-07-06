@@ -74,15 +74,10 @@
   display: none;
 }
 
-.chat-page .msg-item {
-  margin-top: 0;
-  padding-top: 8px;
-  box-sizing: border-box;
-}
-
 .chat-page .message-item {
   width: 100%;
   display: flex;
+  margin-top: 8px;
   position: relative;
 }
 
@@ -274,8 +269,7 @@
 .chat-page .badge-block {
   display: block;
   text-align: center;
-  margin: 0 auto;
-  padding: 5px 0;
+  margin: 5px auto;
   position: relative;
 }
 
@@ -289,8 +283,7 @@
 .chat-page .imgCenter-badge {
   display: block;
   text-align: center;
-  margin: 0 auto;
-  padding: 5px 0;
+  margin: 5px auto;
   position: relative;
 }
 
@@ -325,14 +318,7 @@
   line-height: 20px;
   height: 20px;
   font-size: 12px;
-  margin-top: 0;
-  margin-bottom: 0;
-  position: relative;
-  top: -3px;
-}
-
-.chat-page .msg-meta {
-  width: 100%;
+  margin-top: -3px;
 }
 
 .chat-page > main > .message-list {
@@ -346,20 +332,4 @@
 
 .chat-page.is-capturing > main > .message-list {
   max-height: none;
-}
-
-.chat-page.is-capturing .msg-item {
-  margin-top: 0;
-  padding-top: 8px;
-}
-
-.chat-page.is-capturing .badge-block,
-.chat-page.is-capturing .imgCenter-badge {
-  margin: 0 auto;
-  padding: 5px 0;
-}
-
-.chat-page.is-capturing .leftName {
-  margin-top: 0;
-  top: -3px;
 }
