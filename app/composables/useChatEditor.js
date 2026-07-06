@@ -445,48 +445,13 @@ export const useChatEditor = (chatId) => {
     })
   }
 
-  const resetCaptureLayout = (root) => {
-    if (!root) {
-      return
-    }
-
-    const main = root.querySelector('main')
-
-    if (main) {
-      main.style.maxHeight = ''
-      main.style.overflow = ''
-    }
-
-    root.querySelectorAll('.message-list').forEach((list) => {
-      list.style.maxHeight = ''
-      list.style.overflow = ''
-    })
-
-    root.querySelectorAll('.msg-item').forEach((item) => {
-      item.style.marginTop = ''
-      item.style.paddingTop = ''
-      item.style.boxSizing = ''
-    })
-
-    root.querySelectorAll('.badge-block, .imgCenter-badge').forEach((block) => {
-      block.style.margin = ''
-      block.style.paddingTop = ''
-      block.style.paddingBottom = ''
-    })
-
-    root.querySelectorAll('.leftName').forEach((name) => {
-      name.style.marginTop = ''
-      name.style.position = ''
-      name.style.top = ''
-    })
-  }
-
   const captureChatCanvas = async (chatPreview, options = {}) => {
     if (!import.meta.client || !chatPreview) {
       return null
     }
 
     const chatPage = resolveRefElement(chatPreview.chatPageRef)
+    const messageList = resolveRefElement(chatPreview.messageListRef)
 
     if (!chatPage) {
       return null
@@ -495,6 +460,18 @@ export const useChatEditor = (chatId) => {
     chatPage.classList.add('is-capturing')
     applyCaptureLayout(chatPage)
 
+    const main = chatPage.querySelector('main')
+
+    if (messageList) {
+      messageList.style.maxHeight = 'none'
+      messageList.style.overflow = 'visible'
+    }
+
+    if (main) {
+      main.style.maxHeight = 'none'
+      main.style.overflow = 'visible'
+    }
+
     try {
       const { default: html2canvas } = await import('html2canvas')
       const { onclone: userOnclone, ...html2canvasOptions } = options
@@ -502,23 +479,45 @@ export const useChatEditor = (chatId) => {
       return await html2canvas(chatPage, {
         useCORS: true,
         scrollX: 0,
-        scrollY: 0,
+        scrollY: -window.scrollY,
+        windowWidth: chatPage.scrollWidth,
+        windowHeight: chatPage.scrollHeight,
         ...html2canvasOptions,
         onclone: (clonedDoc, element) => {
-          const clonedRoot = element?.classList?.contains('chat-page')
-            ? element
-            : clonedDoc.querySelector('.chat-page')
-
-          if (clonedRoot) {
-            applyCaptureLayout(clonedRoot)
-          }
-
+          applyCaptureLayout(clonedDoc.querySelector('.chat-page.is-capturing'))
           userOnclone?.(clonedDoc, element)
         },
       })
     } finally {
       chatPage.classList.remove('is-capturing')
-      resetCaptureLayout(chatPage)
+
+      chatPage.querySelectorAll('.msg-item').forEach((item) => {
+        item.style.marginTop = ''
+        item.style.paddingTop = ''
+        item.style.boxSizing = ''
+      })
+
+      chatPage.querySelectorAll('.badge-block, .imgCenter-badge').forEach((block) => {
+        block.style.margin = ''
+        block.style.paddingTop = ''
+        block.style.paddingBottom = ''
+      })
+
+      chatPage.querySelectorAll('.leftName').forEach((name) => {
+        name.style.marginTop = ''
+        name.style.position = ''
+        name.style.top = ''
+      })
+
+      if (main) {
+        main.style.maxHeight = ''
+        main.style.overflow = ''
+      }
+
+      if (messageList) {
+        messageList.style.maxHeight = '85vh'
+        messageList.style.overflow = ''
+      }
     }
   }
 
