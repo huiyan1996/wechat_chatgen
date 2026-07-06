@@ -371,18 +371,3 @@
   margin-top: 0;
   top: -3px;
 }
-
-/* html2canvas-friendly text boundary reset */
-.chat-page .message-bubble,
-.chat-page .message-bubble *,
-.chat-page .time-badge {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  vertical-align: bottom !important;
-}
-
-.chat-page *,
-.chat-page *::before,
-.chat-page *::after {
-  box-sizing: border-box !important;
-}
