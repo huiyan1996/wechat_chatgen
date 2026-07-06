@@ -9,8 +9,9 @@
   height: 50px;
   background: #2b2b2b;
   color: #fff;
-  display: block;
-  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   z-index: 1;
 }
@@ -22,10 +23,7 @@
 }
 
 .chat-page .nav-back {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 50px;
+  height: 100%;
   width: 66px;
   font-size: 16px;
   font-weight: lighter;
@@ -43,25 +41,17 @@
 
 .chat-page .chat-page-title {
   font-size: 18px;
-  margin: 0 auto;
-  text-align: center;
-  width: 100%;
+  margin: 0;
   max-width: calc(100% - 140px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  height: 50px;
-  line-height: 50px !important;
-  display: block;
+  line-height: normal;
+  display: flex;
+  align-items: center;
 }
 
 .chat-page .nav-person {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 50px;
-  display: flex;
-  align-items: center;
   padding-right: 8px;
 }
 
@@ -333,12 +323,13 @@
 }
 
 .chat-page .leftName {
-  line-height: 14px;
-  height: 14px;
+  line-height: 20px;
+  height: 20px;
   font-size: 12px;
   margin-top: 0;
-  margin-bottom: 3px;
-  display: block;
+  margin-bottom: 0;
+  position: relative;
+  top: -3px;
 }
 
 .chat-page .msg-meta {
@@ -378,7 +369,7 @@
 
 .chat-page.is-capturing .leftName {
   margin-top: 0;
-  margin-bottom: 3px;
+  top: -3px;
 }
 
 /* html2canvas-friendly text boundary reset */

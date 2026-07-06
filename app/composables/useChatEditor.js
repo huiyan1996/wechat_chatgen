@@ -428,7 +428,7 @@ export const useChatEditor = (chatId) => {
       item.style.boxSizing = 'border-box'
     })
 
-    root.querySelectorAll('.message-bubble, .time-badge').forEach((el) => {
+    root.querySelectorAll('.message-bubble, .time-badge, .leftName').forEach((el) => {
       el.style.marginTop = '0px'
       el.style.marginBottom = '0px'
     })
@@ -441,9 +441,8 @@ export const useChatEditor = (chatId) => {
 
     root.querySelectorAll('.leftName').forEach((name) => {
       name.style.marginTop = '0'
-      name.style.marginBottom = '3px'
-      name.style.position = ''
-      name.style.top = ''
+      name.style.position = 'relative'
+      name.style.top = '-3px'
     })
 
     root.querySelectorAll('.message-bubble[contenteditable]').forEach((bubble) => {
