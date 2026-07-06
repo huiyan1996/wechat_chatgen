@@ -441,7 +441,7 @@ export const useChatEditor = (chatId) => {
 
     root.querySelectorAll('.leftName').forEach((name) => {
       name.style.marginTop = '0'
-      name.style.marginBottom = '4px'
+      name.style.marginBottom = '3px'
       name.style.position = ''
       name.style.top = ''
     })

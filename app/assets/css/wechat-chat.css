@@ -95,20 +95,6 @@
   width: 100%;
   display: flex;
   position: relative;
-  align-items: flex-start;
-}
-
-.chat-page .message-item > div:not(.message-bubble):not(.avatar) {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex: 1;
-  min-width: 0;
-}
-
-.chat-page .message-item--right > div:not(.message-bubble):not(.avatar) {
-  align-items: flex-end;
 }
 
 .chat-page .deleteBtn {
@@ -166,7 +152,6 @@
   position: relative;
   word-break: break-word;
   width: fit-content;
-  margin-top: 0 !important;
 }
 
 .chat-page .message-item--left .message-bubble {
@@ -348,12 +333,11 @@
 }
 
 .chat-page .leftName {
-  font-size: 12px;
-  color: #737373;
   line-height: 14px;
   height: 14px;
-  margin-top: 0 !important;
-  margin-bottom: 4px !important;
+  font-size: 12px;
+  margin-top: 0;
+  margin-bottom: 3px;
   display: block;
 }
 
@@ -394,7 +378,7 @@
 
 .chat-page.is-capturing .leftName {
   margin-top: 0;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 /* html2canvas-friendly text boundary reset */
