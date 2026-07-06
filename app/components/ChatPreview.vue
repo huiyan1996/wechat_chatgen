@@ -18,8 +18,8 @@
 
     <main>
       <div
-        ref="messageListRef"
         class="message-list"
+        :class="{ 'is-generating': isGenerating }"
       >
         <template
           v-for="(message, index) in chatList"
@@ -207,12 +207,15 @@ defineProps({
     type: String,
     default: '/img/icon/person.svg',
   },
+  isGenerating: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(['delete-message', 'change-side', 'edit-content'])
 
 const chatPageRef = ref(null)
-const messageListRef = ref(null)
 
 const handleImageError = (event) => {
   event.target.src = '/img/icon/person.svg'
@@ -220,7 +223,6 @@ const handleImageError = (event) => {
 
 defineExpose({
   chatPageRef,
-  messageListRef,
 })
 </script>
 

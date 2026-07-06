@@ -32,22 +32,13 @@
 
           <button
             type="button"
-            class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
-            :disabled="isGeneratingPreview"
+            class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
             aria-label="Generate preview image"
             @click="handleGenerate"
           >
-            {{ isGeneratingPreview ? '生成中...' : '生成' }}
+            生成
           </button>
         </div>
-
-        <p
-          v-if="generateError"
-          class="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700"
-          role="alert"
-        >
-          {{ generateError }}
-        </p>
 
         <p
           v-if="saveMessage"
@@ -519,6 +510,7 @@
           :chat-type="chatType"
           :chat-list="chatList"
           :default-img="defaultImg"
+          :is-generating="isGenerating || isDownloadingPng"
           @delete-message="deleteMessage"
           @change-side="changeMessageSide"
           @edit-content="updateMessageContent"
@@ -594,6 +586,7 @@ definePageMeta({
 })
 
 const chatPreviewRef = ref(null)
+const isGenerating = ref(false)
 
 const {
   isLoading,
@@ -604,10 +597,8 @@ const {
   isUploading,
   generatedImage,
   showImageModal,
-  isGeneratingPreview,
   isDownloadingPng,
   downloadPngError,
-  generateError,
   chapterOptions,
   form,
   userList,
@@ -692,11 +683,21 @@ const handleSave = async () => {
 }
 
 const handleGenerate = async () => {
-  await generatePreviewImage(chatPreviewRef.value)
+  isGenerating.value = true
+
+  await nextTick()
+
+  try {
+    await generatePreviewImage(chatPreviewRef.value?.chatPageRef)
+  } finally {
+    isGenerating.value = false
+  }
 }
 
 const handleDownloadPng = async () => {
-  await downloadPreviewPng(chatPreviewRef.value)
+  await nextTick()
+
+  await downloadPreviewPng(chatPreviewRef.value?.chatPageRef)
 }
 
 onMounted(() => {
