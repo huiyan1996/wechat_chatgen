@@ -98,7 +98,7 @@
   align-items: flex-start;
 }
 
-.chat-page .message-body {
+.chat-page .message-item > div:not(.message-bubble):not(.avatar) {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -106,9 +106,14 @@
   flex: 1;
   min-width: 0;
   gap: 0;
+  line-height: 0;
 }
 
-.chat-page .message-item--right .message-body {
+.chat-page .message-item > div:not(.message-bubble):not(.avatar) > * {
+  line-height: normal;
+}
+
+.chat-page .message-item--right > div:not(.message-bubble):not(.avatar) {
   align-items: flex-end;
 }
 
@@ -161,26 +166,15 @@
 
 .chat-page .message-bubble {
   border: 1px solid #ddd;
-  padding: 4px 10px;
+  padding: 6px 10px;
   border-radius: 3px;
   max-width: 280px;
   position: relative;
   word-break: break-word;
   width: fit-content;
-  margin: 0 !important;
-  line-height: 20px;
-  display: inline-block;
-  font-size: 16px;
-  vertical-align: top;
-}
-
-.chat-page .message-bubble-text {
-  display: inline;
-  margin: 0;
-  padding: 0;
-  line-height: 20px;
-  font-size: 16px;
-  vertical-align: top;
+  margin-top: 0 !important;
+  line-height: 1.35;
+  display: block;
 }
 
 .chat-page .message-item--left .message-bubble {
@@ -367,13 +361,12 @@
 .chat-page .leftName {
   font-size: 12px;
   color: #737373;
-  line-height: 16px;
-  min-height: 16px;
-  margin: 0 0 2px !important;
-  padding: 0;
+  line-height: 14px;
+  height: 14px;
+  margin-top: 0 !important;
+  margin-bottom: 2px !important;
   display: block;
-  overflow: visible;
-  text-align: left;
+  overflow: hidden;
 }
 
 .chat-page .msg-meta {
@@ -409,39 +402,6 @@
   padding-top: 0;
 }
 
-.chat-page.is-capturing .message-item {
-  display: table;
-  width: 100%;
-  table-layout: auto;
-  border-collapse: collapse;
-}
-
-.chat-page.is-capturing .message-item .avatar {
-  display: table-cell;
-  vertical-align: top;
-  width: 60px;
-}
-
-.chat-page.is-capturing .message-body {
-  display: table-cell;
-  vertical-align: top;
-  width: auto;
-  line-height: normal;
-}
-
-.chat-page.is-capturing .message-item--right {
-  direction: rtl;
-}
-
-.chat-page.is-capturing .message-item--right .avatar,
-.chat-page.is-capturing .message-item--right .message-body {
-  direction: ltr;
-}
-
-.chat-page.is-capturing .message-item--right .message-body {
-  text-align: right;
-}
-
 .chat-page.is-capturing .msg-item {
   margin-top: 0;
   padding-top: 8px;
@@ -458,37 +418,27 @@
 }
 
 .chat-page.is-capturing .leftName {
-  margin: 0 0 2px !important;
-  padding: 0;
-  line-height: 16px;
-  min-height: 16px;
-  height: auto;
-  overflow: visible;
-  font-size: 12px;
+  margin-top: 0;
+  margin-bottom: 2px;
 }
 
-.chat-page.is-capturing .message-bubble {
-  display: inline-block !important;
-  padding: 4px 10px !important;
-  line-height: 20px !important;
-  font-size: 16px !important;
-  vertical-align: top !important;
-  height: auto !important;
-}
-
-.chat-page.is-capturing .message-bubble-text {
-  display: inline !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  line-height: 20px !important;
-  font-size: 16px !important;
-  vertical-align: top !important;
+.chat-page.is-capturing .message-item > div:not(.message-bubble):not(.avatar) {
+  gap: 0;
+  line-height: 0;
 }
 
 .chat-page.is-capturing .message-bubble,
 .chat-page.is-capturing .message-bubble * {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+  vertical-align: top !important;
+  line-height: 1.35 !important;
+}
+
+.chat-page.is-capturing .message-bubble {
+  display: block !important;
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
 }
 
 .chat-page.is-capturing .time-badge {

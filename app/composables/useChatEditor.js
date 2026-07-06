@@ -405,29 +405,7 @@ export const useChatEditor = (chatId) => {
     return null
   }
 
-  const normalizeTextBubblesForCapture = (root) => {
-    root.querySelectorAll('.message-bubble').forEach((bubble) => {
-      if (bubble.querySelector('img, svg, .message-bubble-text')) {
-        return
-      }
-
-      const text = (bubble.textContent || '').trim()
-
-      if (!text) {
-        return
-      }
-
-      bubble.textContent = ''
-      const textNode = document.createElement('span')
-      textNode.className = 'message-bubble-text'
-      textNode.textContent = text
-      bubble.appendChild(textNode)
-    })
-  }
-
-  const applyCaptureLayout = (root, options = {}) => {
-    const { normalizeText = false } = options
-
+  const applyCaptureLayout = (root) => {
     if (!root) {
       return
     }
@@ -462,86 +440,48 @@ export const useChatEditor = (chatId) => {
       firstMsgItem.style.paddingTop = '0'
     }
 
-    root.querySelectorAll('.message-item').forEach((item) => {
-      item.style.display = 'table'
-      item.style.width = '100%'
-      item.style.tableLayout = 'auto'
-      item.style.borderCollapse = 'collapse'
-
-      if (item.classList.contains('message-item--right')) {
-        item.style.direction = 'rtl'
-      }
+    root.querySelectorAll('.message-item > div:not(.message-bubble):not(.avatar)').forEach((body) => {
+      body.style.display = 'flex'
+      body.style.flexDirection = 'column'
+      body.style.gap = '0'
+      body.style.lineHeight = '0'
     })
 
-    root.querySelectorAll('.message-item .avatar').forEach((avatar) => {
-      avatar.style.display = 'table-cell'
-      avatar.style.verticalAlign = 'top'
-      avatar.style.width = '60px'
-      avatar.style.direction = 'ltr'
+    root.querySelectorAll('.message-bubble, .time-badge').forEach((el) => {
+      el.style.marginTop = '0px'
+      el.style.marginBottom = '0px'
+      el.style.verticalAlign = 'top'
     })
-
-    root.querySelectorAll('.message-body').forEach((body) => {
-      body.style.display = 'table-cell'
-      body.style.verticalAlign = 'top'
-      body.style.width = 'auto'
-      body.style.lineHeight = 'normal'
-      body.style.direction = 'ltr'
-
-      const messageItem = body.closest('.message-item')
-
-      if (messageItem?.classList.contains('message-item--right')) {
-        body.style.textAlign = 'right'
-      }
-    })
-
-    if (normalizeText) {
-      root.querySelectorAll('.message-bubble[contenteditable]').forEach((bubble) => {
-        bubble.removeAttribute('contenteditable')
-        bubble.style.userSelect = 'none'
-      })
-
-      normalizeTextBubblesForCapture(root)
-    }
 
     root.querySelectorAll('.message-bubble').forEach((bubble) => {
-      bubble.style.display = 'inline-block'
-      bubble.style.margin = '0'
-      bubble.style.padding = '4px 10px'
-      bubble.style.lineHeight = '20px'
-      bubble.style.fontSize = '16px'
-      bubble.style.verticalAlign = 'top'
-      bubble.style.height = 'auto'
-    })
+      bubble.style.display = 'block'
+      bubble.style.lineHeight = '1.35'
+      bubble.style.paddingTop = '6px'
+      bubble.style.paddingBottom = '6px'
 
-    root.querySelectorAll('.message-bubble-text').forEach((textNode) => {
-      textNode.style.display = 'inline'
-      textNode.style.margin = '0'
-      textNode.style.padding = '0'
-      textNode.style.lineHeight = '20px'
-      textNode.style.fontSize = '16px'
-      textNode.style.verticalAlign = 'top'
-    })
-
-    root.querySelectorAll('.time-badge').forEach((badge) => {
-      badge.style.margin = '0'
-      badge.style.verticalAlign = 'baseline'
-      badge.style.lineHeight = '1.2'
+      if (!bubble.querySelector('img, svg') && bubble.childNodes.length <= 1) {
+        bubble.textContent = (bubble.textContent || '').trim()
+      }
     })
 
     root.querySelectorAll('.badge-block, .imgCenter-badge').forEach((block) => {
       block.style.margin = '0 auto'
-      block.style.padding = '0'
+      block.style.paddingTop = '0'
+      block.style.paddingBottom = '0'
     })
 
     root.querySelectorAll('.leftName').forEach((name) => {
-      name.style.margin = '0 0 2px 0'
-      name.style.padding = '0'
-      name.style.lineHeight = '16px'
-      name.style.minHeight = '16px'
-      name.style.height = 'auto'
-      name.style.overflow = 'visible'
-      name.style.display = 'block'
-      name.style.fontSize = '12px'
+      name.style.marginTop = '0'
+      name.style.marginBottom = '2px'
+      name.style.lineHeight = '14px'
+      name.style.height = '14px'
+      name.style.position = ''
+      name.style.top = ''
+    })
+
+    root.querySelectorAll('.message-bubble[contenteditable]').forEach((bubble) => {
+      bubble.removeAttribute('contenteditable')
+      bubble.style.userSelect = 'none'
     })
   }
 
@@ -574,68 +514,40 @@ export const useChatEditor = (chatId) => {
       item.style.paddingTop = ''
     })
 
-    root.querySelectorAll('.message-item').forEach((item) => {
-      item.style.display = ''
-      item.style.width = ''
-      item.style.tableLayout = ''
-      item.style.borderCollapse = ''
-      item.style.direction = ''
-    })
-
-    root.querySelectorAll('.message-item .avatar').forEach((avatar) => {
-      avatar.style.display = ''
-      avatar.style.verticalAlign = ''
-      avatar.style.width = ''
-      avatar.style.direction = ''
-    })
-
-    root.querySelectorAll('.message-body').forEach((body) => {
+    root.querySelectorAll('.message-item > div:not(.message-bubble):not(.avatar)').forEach((body) => {
       body.style.display = ''
-      body.style.verticalAlign = ''
-      body.style.width = ''
+      body.style.flexDirection = ''
+      body.style.gap = ''
       body.style.lineHeight = ''
-      body.style.direction = ''
-      body.style.textAlign = ''
     })
 
     root.querySelectorAll('.badge-block, .imgCenter-badge').forEach((block) => {
       block.style.margin = ''
-      block.style.padding = ''
+      block.style.paddingTop = ''
+      block.style.paddingBottom = ''
     })
 
     root.querySelectorAll('.leftName').forEach((name) => {
-      name.style.margin = ''
-      name.style.padding = ''
+      name.style.marginTop = ''
+      name.style.marginBottom = ''
       name.style.lineHeight = ''
-      name.style.minHeight = ''
       name.style.height = ''
-      name.style.overflow = ''
-      name.style.display = ''
-      name.style.fontSize = ''
+      name.style.position = ''
+      name.style.top = ''
     })
 
     root.querySelectorAll('.message-bubble, .time-badge').forEach((el) => {
-      el.style.margin = ''
+      el.style.marginTop = ''
+      el.style.marginBottom = ''
       el.style.verticalAlign = ''
     })
 
     root.querySelectorAll('.message-bubble').forEach((bubble) => {
       bubble.style.display = ''
       bubble.style.lineHeight = ''
-      bubble.style.padding = ''
-      bubble.style.fontSize = ''
+      bubble.style.paddingTop = ''
+      bubble.style.paddingBottom = ''
       bubble.style.userSelect = ''
-      bubble.style.verticalAlign = ''
-      bubble.style.height = ''
-    })
-
-    root.querySelectorAll('.message-bubble-text').forEach((textNode) => {
-      textNode.style.display = ''
-      textNode.style.margin = ''
-      textNode.style.padding = ''
-      textNode.style.lineHeight = ''
-      textNode.style.fontSize = ''
-      textNode.style.verticalAlign = ''
     })
   }
 
@@ -661,7 +573,6 @@ export const useChatEditor = (chatId) => {
         useCORS: true,
         scrollX: 0,
         scrollY: 0,
-        foreignObjectRendering: false,
         ...html2canvasOptions,
         onclone: (clonedDoc, element) => {
           const clonedRoot = element?.classList?.contains('chat-page')
@@ -669,8 +580,7 @@ export const useChatEditor = (chatId) => {
             : clonedDoc.querySelector('.chat-page')
 
           if (clonedRoot) {
-            clonedRoot.classList.add('is-capturing')
-            applyCaptureLayout(clonedRoot, { normalizeText: true })
+            applyCaptureLayout(clonedRoot)
           }
 
           userOnclone?.(clonedDoc, element)
