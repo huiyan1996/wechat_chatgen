@@ -414,9 +414,7 @@ export const useChatEditor = (chatId) => {
 
     if (main) {
       main.style.maxHeight = 'none'
-      main.style.minHeight = '0'
       main.style.overflow = 'visible'
-      main.style.paddingTop = '0'
     }
 
     root.querySelectorAll('.message-list').forEach((list) => {
@@ -430,51 +428,20 @@ export const useChatEditor = (chatId) => {
       item.style.boxSizing = 'border-box'
     })
 
-    root.querySelectorAll('.msg-meta').forEach((item) => {
-      item.style.paddingTop = '4px'
-    })
-
-    const firstMsgItem = root.querySelector('.message-list > .msg-item')
-
-    if (firstMsgItem) {
-      firstMsgItem.style.paddingTop = '0'
-    }
-
-    root.querySelectorAll('.message-item > div:not(.message-bubble):not(.avatar)').forEach((body) => {
-      body.style.display = 'flex'
-      body.style.flexDirection = 'column'
-      body.style.gap = '0'
-      body.style.lineHeight = '0'
-    })
-
     root.querySelectorAll('.message-bubble, .time-badge').forEach((el) => {
       el.style.marginTop = '0px'
       el.style.marginBottom = '0px'
-      el.style.verticalAlign = 'top'
-    })
-
-    root.querySelectorAll('.message-bubble').forEach((bubble) => {
-      bubble.style.display = 'block'
-      bubble.style.lineHeight = '1.35'
-      bubble.style.paddingTop = '6px'
-      bubble.style.paddingBottom = '6px'
-
-      if (!bubble.querySelector('img, svg') && bubble.childNodes.length <= 1) {
-        bubble.textContent = (bubble.textContent || '').trim()
-      }
     })
 
     root.querySelectorAll('.badge-block, .imgCenter-badge').forEach((block) => {
       block.style.margin = '0 auto'
-      block.style.paddingTop = '0'
-      block.style.paddingBottom = '0'
+      block.style.paddingTop = '5px'
+      block.style.paddingBottom = '5px'
     })
 
     root.querySelectorAll('.leftName').forEach((name) => {
       name.style.marginTop = '0'
-      name.style.marginBottom = '2px'
-      name.style.lineHeight = '14px'
-      name.style.height = '14px'
+      name.style.marginBottom = '4px'
       name.style.position = ''
       name.style.top = ''
     })
@@ -494,9 +461,7 @@ export const useChatEditor = (chatId) => {
 
     if (main) {
       main.style.maxHeight = ''
-      main.style.minHeight = ''
       main.style.overflow = ''
-      main.style.paddingTop = ''
     }
 
     root.querySelectorAll('.message-list').forEach((list) => {
@@ -510,17 +475,6 @@ export const useChatEditor = (chatId) => {
       item.style.boxSizing = ''
     })
 
-    root.querySelectorAll('.msg-meta').forEach((item) => {
-      item.style.paddingTop = ''
-    })
-
-    root.querySelectorAll('.message-item > div:not(.message-bubble):not(.avatar)').forEach((body) => {
-      body.style.display = ''
-      body.style.flexDirection = ''
-      body.style.gap = ''
-      body.style.lineHeight = ''
-    })
-
     root.querySelectorAll('.badge-block, .imgCenter-badge').forEach((block) => {
       block.style.margin = ''
       block.style.paddingTop = ''
@@ -530,8 +484,6 @@ export const useChatEditor = (chatId) => {
     root.querySelectorAll('.leftName').forEach((name) => {
       name.style.marginTop = ''
       name.style.marginBottom = ''
-      name.style.lineHeight = ''
-      name.style.height = ''
       name.style.position = ''
       name.style.top = ''
     })
@@ -539,14 +491,9 @@ export const useChatEditor = (chatId) => {
     root.querySelectorAll('.message-bubble, .time-badge').forEach((el) => {
       el.style.marginTop = ''
       el.style.marginBottom = ''
-      el.style.verticalAlign = ''
     })
 
     root.querySelectorAll('.message-bubble').forEach((bubble) => {
-      bubble.style.display = ''
-      bubble.style.lineHeight = ''
-      bubble.style.paddingTop = ''
-      bubble.style.paddingBottom = ''
       bubble.style.userSelect = ''
     })
   }
