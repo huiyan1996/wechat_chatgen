@@ -26,3 +26,5 @@ logs
 # User uploads
 public/uploads/*
 !public/uploads/.gitkeep
+
+.netlify/*
