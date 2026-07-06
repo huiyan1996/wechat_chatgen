@@ -1,14 +1,15 @@
 <template>
   <section
+    id="chatPage"
     ref="chatPageRef"
     class="chat-page"
   >
-    <header class="chat-page-header">
+    <header>
       <div class="nav-back">
         <i class="icon icon-back" />
         <span>微信</span>
       </div>
-      <h1 class="chat-page-title">
+      <h1>
         {{ chatName || '小说名字' }}
       </h1>
       <div class="nav-person">
@@ -18,8 +19,10 @@
 
     <main>
       <div
+        id="messageList"
+        ref="messageListRef"
         class="message-list"
-        :class="{ 'is-generating': isGenerating }"
+        style="max-height: 85vh"
       >
         <template
           v-for="(message, index) in chatList"
@@ -40,7 +43,7 @@
             </button>
 
             <img
-              v-if="message.type !== 'img' || !message.isSticker"
+              v-if="message.type !== 'img'"
               class="avatar"
               :class="message.side"
               :src="message.user_img || defaultImg"
@@ -59,8 +62,9 @@
 
             <div>
               <div
-                v-if="message.side === 'left' && chatType !== 'private'"
+                v-if="message.side === 'left'"
                 class="text-start leftName"
+                :style="chatType === 'private' ? { display: 'none' } : undefined"
               >
                 {{ message.name }}
               </div>
@@ -89,9 +93,9 @@
                 v-else-if="message.type === 'call'"
                 class="message-bubble"
               >
-                <div class="flex items-center">
+                <div class="d-flex align-items-center">
                   <div>{{ message.content }}</div>
-                  <div class="ml-2">
+                  <div class="ms-2">
                     <svg
                       v-if="message.callType === 'phone'"
                       xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +143,7 @@
                 :class="{ time: message.type === 'timepass' }"
                 :style="message.type === 'timepass' ? { height: `${message.content || 30}px` } : undefined"
               >
-                {{ message.type === 'time' ? message.content : '' }}
+                {{ message.type === 'time' ? message.content : ' ' }}
               </span>
               <button
                 type="button"
@@ -207,15 +211,12 @@ defineProps({
     type: String,
     default: '/img/icon/person.svg',
   },
-  isGenerating: {
-    type: Boolean,
-    default: false,
-  },
 })
 
 const emit = defineEmits(['delete-message', 'change-side', 'edit-content'])
 
 const chatPageRef = ref(null)
+const messageListRef = ref(null)
 
 const handleImageError = (event) => {
   event.target.src = '/img/icon/person.svg'
@@ -223,6 +224,7 @@ const handleImageError = (event) => {
 
 defineExpose({
   chatPageRef,
+  messageListRef,
 })
 </script>
 

@@ -9,9 +9,9 @@
 
     <div
       v-else
-      class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px]"
+      class="flex flex-col gap-6 xl:flex-row xl:items-start"
     >
-      <div class="space-y-4">
+      <div class="min-w-0 flex-1 space-y-4">
         <div class="flex flex-wrap gap-3">
           <NuxtLink
             to="/listing"
@@ -69,8 +69,8 @@
             设定
           </h2>
 
-          <div class="grid gap-4 md:grid-cols-2">
-            <div>
+          <div class="flex flex-wrap gap-4">
+            <div class="w-full md:w-[calc(50%-0.5rem)]">
               <label
                 for="genTitle"
                 class="mb-2 block text-sm font-medium text-slate-700"
@@ -86,7 +86,7 @@
               >
             </div>
 
-            <div>
+            <div class="w-full md:w-[calc(50%-0.5rem)]">
               <label
                 for="author"
                 class="mb-2 block text-sm font-medium text-slate-700"
@@ -102,7 +102,7 @@
               >
             </div>
 
-            <div class="md:col-span-2">
+            <div class="w-full">
               <label
                 for="nextChapter"
                 class="mb-2 block text-sm font-medium text-slate-700"
@@ -503,14 +503,12 @@
         </div>
       </div>
 
-      <div class="xl:sticky xl:top-4 xl:self-start">
+      <div class="chat-preview-column w-full shrink-0 xl:sticky xl:top-4 xl:w-[420px]">
         <ChatPreview
-          ref="chatPreviewRef"
           :chat-name="form.chatName"
           :chat-type="chatType"
           :chat-list="chatList"
           :default-img="defaultImg"
-          :is-generating="isGenerating"
           @delete-message="deleteMessage"
           @change-side="changeMessageSide"
           @edit-content="updateMessageContent"
@@ -566,9 +564,6 @@ definePageMeta({
   layout: 'app',
   middleware: 'auth',
 })
-
-const chatPreviewRef = ref(null)
-const isGenerating = ref(false)
 
 const {
   isLoading,
@@ -662,15 +657,7 @@ const handleSave = async () => {
 }
 
 const handleGenerate = async () => {
-  isGenerating.value = true
-
-  await nextTick()
-
-  try {
-    await generatePreviewImage(chatPreviewRef.value?.chatPageRef)
-  } finally {
-    isGenerating.value = false
-  }
+  await generatePreviewImage()
 }
 
 onMounted(() => {

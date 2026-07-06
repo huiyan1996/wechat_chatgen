@@ -115,7 +115,7 @@ export const useTextEditor = () => {
     isGenerating.value = true
 
     try {
-      const { default: html2canvas } = await import('html2canvas')
+      const html2canvas = await loadHtml2Canvas()
       const tempContainer = document.createElement('div')
 
       tempContainer.style.width = '1200px'

@@ -385,15 +385,49 @@ export const useChatEditor = (chatId) => {
     }
   }
 
-  const generatePreviewImage = async (element) => {
-    if (!import.meta.client || !element) {
-      return
+  const captureChatCanvas = async (options = {}) => {
+    if (!import.meta.client) {
+      return null
     }
 
-    const { default: html2canvas } = await import('html2canvas')
-    const canvas = await html2canvas(element, { useCORS: true })
-    generatedImage.value = canvas.toDataURL('image/png')
-    showImageModal.value = true
+    const chatPage = document.querySelector('#chatPage')
+    const messageList = document.querySelector('#messageList')
+
+    if (!chatPage) {
+      return null
+    }
+
+    if (messageList) {
+      messageList.style.maxHeight = 'unset'
+    }
+
+    try {
+      const html2canvas = await loadHtml2Canvas()
+      return await html2canvas(chatPage, {
+        useCORS: true,
+        ...options,
+      })
+    } finally {
+      if (messageList) {
+        messageList.style.maxHeight = '85vh'
+      }
+    }
+  }
+
+  const generatePreviewImage = async () => {
+    try {
+      const canvas = await captureChatCanvas()
+
+      if (!canvas) {
+        return
+      }
+
+      generatedImage.value = canvas.toDataURL('image/png')
+      showImageModal.value = true
+    } catch (error) {
+      console.error('Image generation failed:', error)
+      saveError.value = '图片生成失败，请重试'
+    }
   }
 
   return {
