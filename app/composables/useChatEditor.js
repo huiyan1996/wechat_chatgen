@@ -5,6 +5,7 @@ export const useChatEditor = (chatId) => {
 
   const isLoading = ref(true)
   const isSaving = ref(false)
+  const isGenerating = ref(false)
   const saveMessage = ref('')
   const saveError = ref('')
   const generatedImage = ref('')
@@ -385,7 +386,9 @@ export const useChatEditor = (chatId) => {
     }
   }
 
-  const captureChatCanvas = async (options = {}) => {
+  const CAPTURE_CANVAS_WIDTH = 1200
+
+  const captureChatImage = async () => {
     if (!import.meta.client) {
       return null
     }
@@ -402,10 +405,16 @@ export const useChatEditor = (chatId) => {
     }
 
     try {
-      const html2canvas = await loadHtml2Canvas()
-      return await html2canvas(chatPage, {
-        useCORS: true,
-        ...options,
+      const { toPng } = await import('html-to-image')
+      const elementWidth = chatPage.scrollWidth
+      const elementHeight = chatPage.scrollHeight
+      const canvasHeight = Math.round((elementHeight / elementWidth) * CAPTURE_CANVAS_WIDTH)
+
+      return await toPng(chatPage, {
+        cacheBust: true,
+        canvasWidth: CAPTURE_CANVAS_WIDTH,
+        canvasHeight,
+        filter: (node) => !node.classList?.contains('deleteBtn'),
       })
     } finally {
       if (messageList) {
@@ -415,24 +424,30 @@ export const useChatEditor = (chatId) => {
   }
 
   const generatePreviewImage = async () => {
-    try {
-      const canvas = await captureChatCanvas()
+    isGenerating.value = true
+    saveError.value = ''
 
-      if (!canvas) {
+    try {
+      const dataUrl = await captureChatImage()
+
+      if (!dataUrl) {
         return
       }
 
-      generatedImage.value = canvas.toDataURL('image/png')
+      generatedImage.value = dataUrl
       showImageModal.value = true
     } catch (error) {
       console.error('Image generation failed:', error)
       saveError.value = '图片生成失败，请重试'
+    } finally {
+      isGenerating.value = false
     }
   }
 
   return {
     isLoading,
     isSaving,
+    isGenerating,
     saveMessage,
     saveError,
     uploadError,

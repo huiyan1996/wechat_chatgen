@@ -16,6 +16,7 @@ export const useTextEditor = () => {
     author: '',
     nextChapter: '',
     textOnly: false,
+    fontSize: 18,
   })
 
   const textContent = ref('')
@@ -56,6 +57,7 @@ export const useTextEditor = () => {
 
       const firstBlock = text.chatList?.[0]
       textContent.value = firstBlock?.content || ''
+      form.fontSize = firstBlock?.fontSize ?? 18
 
       await loadChapterOptions()
     } catch (error) {
@@ -74,6 +76,7 @@ export const useTextEditor = () => {
       genTitle: form.genTitle || '新文本',
       author: form.author || '无名',
       content: textContent.value,
+      fontSize: Number(form.fontSize) || 18,
       nextChapter: form.nextChapter || null,
     }
 
@@ -127,10 +130,11 @@ export const useTextEditor = () => {
 
       const title = form.genTitle || '无标题'
       const author = form.author || '无名'
+      const bodyFontSize = Number(form.fontSize) || 18
 
       if (form.textOnly) {
         tempContainer.innerHTML = `
-          <div style="font-size: 20px; text-align: left; max-width: 100%;">
+          <div style="font-size: ${bodyFontSize}px; text-align: left; max-width: 100%;">
             ${textContent.value}
           </div>
         `
@@ -140,7 +144,7 @@ export const useTextEditor = () => {
             <h1 style="font-size: 36px; font-weight: bold; margin-bottom: 10px; color: #2c3e50;">${title}</h1>
             <p style="font-size: 18px; color: #7f8c8d; margin: 0;">作者: ${author}</p>
           </div>
-          <div style="font-size: 20px; text-align: left; max-width: 100%;">
+          <div style="font-size: ${bodyFontSize}px; text-align: left; max-width: 100%;">
             ${textContent.value}
           </div>
         `

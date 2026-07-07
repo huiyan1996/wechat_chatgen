@@ -18,6 +18,7 @@ export default defineEventHandler(async (event) => {
     chatList: [{
       type: 'text',
       content,
+      fontSize: Number(body?.fontSize) || 18,
     }],
     nextChapter: body?.nextChapter || null,
   })

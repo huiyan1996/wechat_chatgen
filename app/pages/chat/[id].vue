@@ -32,11 +32,12 @@
 
           <button
             type="button"
-            class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+            class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+            :disabled="isGenerating"
             aria-label="Generate preview image"
             @click="handleGenerate"
           >
-            生成
+            {{ isGenerating ? '生成中...' : '生成' }}
           </button>
         </div>
 
@@ -535,18 +536,29 @@
       aria-label="Generated image preview"
     >
       <div class="max-h-[90vh] w-full max-w-3xl overflow-auto rounded-2xl bg-white p-4 shadow-xl">
-        <div class="mb-4 flex items-center justify-between">
+        <div class="mb-4 flex items-center justify-between gap-3">
           <h3 class="text-lg font-semibold text-slate-900">
             生成图片
           </h3>
-          <button
-            type="button"
-            class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700"
-            aria-label="Close image preview"
-            @click="showImageModal = false"
-          >
-            Close
-          </button>
+          <div class="flex items-center gap-2">
+            <button
+              v-if="generatedImage"
+              type="button"
+              class="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500"
+              aria-label="Download generated image"
+              @click="handleDownloadGeneratedImage"
+            >
+              下载
+            </button>
+            <button
+              type="button"
+              class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700"
+              aria-label="Close image preview"
+              @click="showImageModal = false"
+            >
+              关闭
+            </button>
+          </div>
         </div>
         <img
           v-if="generatedImage"
@@ -568,6 +580,7 @@ definePageMeta({
 const {
   isLoading,
   isSaving,
+  isGenerating,
   saveMessage,
   saveError,
   uploadError,
@@ -658,6 +671,18 @@ const handleSave = async () => {
 
 const handleGenerate = async () => {
   await generatePreviewImage()
+}
+
+const handleDownloadGeneratedImage = () => {
+  if (!generatedImage.value) {
+    return
+  }
+
+  const title = (form.genTitle || form.chatName || 'chat').trim().replace(/[^\w\u4e00-\u9fa5-]+/g, '_')
+  const link = document.createElement('a')
+  link.href = generatedImage.value
+  link.download = `${title || 'chat'}.png`
+  link.click()
 }
 
 onMounted(() => {

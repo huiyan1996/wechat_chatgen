@@ -110,6 +110,28 @@
           </div>
 
           <div class="md:col-span-2">
+            <label
+              for="fontSize"
+              class="mb-2 block text-sm font-medium text-slate-700"
+            >
+              正文字号
+            </label>
+            <select
+              id="fontSize"
+              v-model.number="form.fontSize"
+              class="w-full rounded-lg border border-slate-300 px-3 py-2 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500 md:max-w-xs"
+            >
+              <option
+                v-for="size in fontSizeOptions"
+                :key="size"
+                :value="size"
+              >
+                {{ size }}px
+              </option>
+            </select>
+          </div>
+
+          <div class="md:col-span-2">
             <label class="mb-3 flex items-center gap-2 text-sm text-slate-700">
               <input
                 v-model="form.textOnly"
@@ -136,7 +158,7 @@
         </h2>
 
         <div class="overflow-hidden rounded-lg border border-slate-300">
-          <div class="flex flex-wrap gap-2 border-b border-slate-300 bg-slate-50 p-3">
+          <div class="flex flex-wrap items-center gap-2 border-b border-slate-300 bg-slate-50 p-3">
             <button
               v-for="tool in toolbarItems"
               :key="tool.command"
@@ -146,12 +168,30 @@
               @click="handleFormat(tool.command)"
               v-html="tool.label"
             />
+            <label class="flex items-center gap-2 text-sm text-slate-700">
+              <span>字号</span>
+              <select
+                v-model.number="toolbarFontSize"
+                class="rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-700 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+                aria-label="Font size"
+                @change="handleFontSizeChange"
+              >
+                <option
+                  v-for="size in fontSizeOptions"
+                  :key="`toolbar-${size}`"
+                  :value="size"
+                >
+                  {{ size }}px
+                </option>
+              </select>
+            </label>
           </div>
 
           <div
             ref="editorRef"
             contenteditable
             class="rich-text-editor min-h-[300px] max-h-[70vh] overflow-y-auto p-4 outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500"
+            :style="{ fontSize: `${form.fontSize}px` }"
             aria-label="Text content editor"
             data-placeholder="请输入文本内容..."
             @input="handleEditorInput"
@@ -177,18 +217,29 @@
       aria-label="Generated image preview"
     >
       <div class="max-h-[90vh] w-full max-w-4xl overflow-auto rounded-2xl bg-white p-4 shadow-xl">
-        <div class="mb-4 flex items-center justify-between">
+        <div class="mb-4 flex items-center justify-between gap-3">
           <h3 class="text-lg font-semibold text-slate-900">
             生成图片
           </h3>
-          <button
-            type="button"
-            class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700"
-            aria-label="Close image preview"
-            @click="showImageModal = false"
-          >
-            关闭
-          </button>
+          <div class="flex items-center gap-2">
+            <button
+              v-if="generatedImage"
+              type="button"
+              class="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-500"
+              aria-label="Download generated image"
+              @click="handleDownloadGeneratedImage"
+            >
+              下载
+            </button>
+            <button
+              type="button"
+              class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700"
+              aria-label="Close image preview"
+              @click="showImageModal = false"
+            >
+              关闭
+            </button>
+          </div>
         </div>
         <img
           v-if="generatedImage"
@@ -208,6 +259,9 @@ definePageMeta({
 })
 
 const editorRef = ref(null)
+const toolbarFontSize = ref(18)
+
+const fontSizeOptions = [14, 16, 18, 20, 22, 24, 28, 32, 36]
 
 const toolbarItems = [
   { command: 'bold', label: '<strong>B</strong>' },
@@ -251,6 +305,41 @@ const handleFormat = (command) => {
   document.execCommand(command, false, null)
 }
 
+const handleFontSizeChange = () => {
+  const size = Number(toolbarFontSize.value)
+
+  if (!size || !editorRef.value) {
+    return
+  }
+
+  editorRef.value.focus()
+
+  const selection = window.getSelection()
+
+  if (!selection || selection.rangeCount === 0) {
+    return
+  }
+
+  const range = selection.getRangeAt(0)
+  const selectedText = range.toString()
+
+  if (selectedText) {
+    const span = document.createElement('span')
+    span.style.fontSize = `${size}px`
+    span.textContent = selectedText
+    range.deleteContents()
+    range.insertNode(span)
+    range.setStartAfter(span)
+    range.collapse(true)
+    selection.removeAllRanges()
+    selection.addRange(range)
+  } else {
+    document.execCommand('insertHTML', false, `<span style="font-size: ${size}px">&#8203;</span>`)
+  }
+
+  textContent.value = editorRef.value.innerHTML
+}
+
 const handleSave = async () => {
   if (editorRef.value) {
     textContent.value = editorRef.value.innerHTML
@@ -267,6 +356,18 @@ const handleGenerate = async () => {
   await generatePreviewImage()
 }
 
+const handleDownloadGeneratedImage = () => {
+  if (!generatedImage.value) {
+    return
+  }
+
+  const title = (form.genTitle || 'text').trim().replace(/[^\w\u4e00-\u9fa5-]+/g, '_')
+  const link = document.createElement('a')
+  link.href = generatedImage.value
+  link.download = `${title || 'text'}.png`
+  link.click()
+}
+
 watch(isLoading, (loading) => {
   if (!loading) {
     nextTick(() => {
@@ -274,6 +375,10 @@ watch(isLoading, (loading) => {
     })
   }
 })
+
+watch(() => form.fontSize, (size) => {
+  toolbarFontSize.value = size
+}, { immediate: true })
 
 onMounted(async () => {
   await loadText()

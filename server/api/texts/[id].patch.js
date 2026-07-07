@@ -34,10 +34,14 @@ export default defineEventHandler(async (event) => {
     text.author = String(body.author).trim() || '无名'
   }
 
-  if (body?.content !== undefined) {
+  if (body?.content !== undefined || body?.fontSize !== undefined) {
+    const existingBlock = text.chatList?.[0] || {}
     text.chatList = [{
       type: 'text',
-      content: body.content,
+      content: body?.content !== undefined ? body.content : existingBlock.content || '',
+      fontSize: body?.fontSize !== undefined
+        ? Number(body.fontSize) || 18
+        : existingBlock.fontSize ?? 18,
     }]
   }
 
